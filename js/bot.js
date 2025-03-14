@@ -145,7 +145,7 @@ export class Bot {
             for(let j = 0; j < board[i].length; j++) {
                 if(board[i][j] === 0) {
                     board[i][j] = this.value;
-                    const score = this.#minimax(board, 0, false);
+                    const score = this.#minimax(board, 0, false, -Infinity, Infinity);
                     board[i][j] = 0;
 
                     if(score > bestScore) {
@@ -159,21 +159,25 @@ export class Bot {
         return bestMove;
     }
 
-    #minimax = (board, depth, isMaximizing) => {
+    #minimax = (board, depth, isMaximizing, alpha, beta) => {
         const winner = this.#determineWinner(board);
 
         if(winner !== 0) return (winner === this.value ? 10 - depth : depth - 10);
         if(this.#isBoardFull(board)) return 0;
 
         let bestScore = isMaximizing ? -Infinity : Infinity;
-        for(let i = 0; i < board.length; i++) {
+        rows: for(let i = 0; i < board.length; i++) {
             for(let j = 0; j < board[i].length; j++) {
                 if(board[i][j] === 0) {
                     board[i][j] = isMaximizing ? this.value : -this.value;
-                    const score = this.#minimax(board, depth + 1, !isMaximizing);
+                    const score = this.#minimax(board, depth + 1, !isMaximizing, alpha, beta);
                     board[i][j] = 0;
 
+                    if(isMaximizing) alpha = Math.max(alpha, score);
+                    else beta = Math.min(beta, score);
+
                     bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
+                    if(beta <= alpha) break rows;
                 }
             }
         }
