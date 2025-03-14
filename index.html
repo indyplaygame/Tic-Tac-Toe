@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/components.css">
+        <script type="module" src="js/script.js" defer></script>
+        <script type="module" src="js/components.js" defer></script>
+        <script type="module" src="js/game.js" defer></script>
+        <title>Tic Tac Toe</title>
+    </head>
+    <body data-theme="light">
+        <div class="theme-switch">
+            <label for="theme-switch">
+                <input type="checkbox" name="theme" id="theme-switch">
+                <div class="slider"></div>
+            </label>
+        </div>
+        <div class="language-select">
+            <details class="select language-select" func="changeLanguage">
+                <summary>
+                    <div class="selected">
+                        <img class="flag" src="https://flagsapi.com/GB/flat/32.png" alt="English">
+                        <p class="name">English</p>
+                    </div>
+                </summary>
+                <div class="mobile">
+                    <div class="options"></div>
+                </div>
+            </details>
+        </div>
+        <i class="ti ti-help help-icon" onclick="openHelp()"></i>
+        <div class="help">
+            <section class="blur"></section>
+            <section class="dark"></section>
+            <section class="content">
+                <div class="container">
+                    <div class="header">
+                        <h2 data-lang="helpHeader">Help</h2>
+                        <i class="ti ti-x close-icon" onclick="closeHelp()"></i>
+                    </div>
+                    <div class="text">
+                        I don't know. Ask Pablo.
+                    </div>
+                </div>
+            </section>
+        </div>
+        <main>
+            <h1 data-lang="title">Tic Tac Toe</h1>
+            <h2 data-lang="selectMode">Select Mode:</h2>
+            <div class="selector mode-selector" func="changeMode">
+                <div class="options game-modes">
+                    <button type="button" class="option game-mode" i="0" val="local_pvp" data-lang="pvpLocal">PvP (Local)</button>
+                    <button type="button" class="option game-mode" i="1" val="online_pvp" data-lang="pvpOnline" disabled>PvP (Online)</button>
+                    <button type="button" class="option game-mode" i="2" val="vs_bot" data-lang="vsBot">Against Bot</button>
+                </div>
+            </div>
+
+            <div class="game-container hidden">
+                <div class="game-page local-pvp">
+                    <form name="local-pvp-settings">
+                        <label for="loc_pvp_size">
+                            <h3 data-lang="boardSize">Select the size of the board:</h3>
+                        </label>
+                        <input type="number" name="size" id="loc_pvp_size" value="3" min="3" max="10" required>
+                        <h3 data-lang="startingPlayer">Starting player:</h3>
+                        <div class="selector starting-player-selector" func="">
+                            <div class="options">
+                                <button type="button" class="option active" i="0" val="x">
+                                    <i class="ti ti-x"></i>
+                                </button>
+                                <button type="button" class="option" i="1" val="o">
+                                    <i class="ti ti-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="button start-game" onclick="startGame()" data-lang="startGame">Start game</button>
+                    </form>
+                    <div class="game">
+                        <div class="turn-text">
+                            <h3 data-lang="nowPlaying">Now playing:</h3>
+                            <i class="ti icon"></i>
+                        </div>
+                    </div>
+                    <div class="game-over-screen">
+                        <h3 class="game-over-text"></h3>
+                        <button type="button" class="button restart-game" onclick="restartGame('local-pvp')" data-lang="restartGame">Play again</button>
+                    </div>
+                </div>
+                <div class="game-page vs-bot active">
+                    <form name="vs-bot-settings">
+                        <h3 data-lang="botDifficulty">Select the difficulty of the bot:</h3>
+                        <div class="selector bot-difficulty-selector" func="">
+                            <div class="options">
+                                <button type="button" class="option active" i="0" val="easy" data-lang="difficultyEasy">Easy</button>
+                                <button type="button" class="option" i="1" val="medium" data-lang="difficultyMedium">Medium</button>
+                                <button type="button" class="option" i="2" val="impossible" data-lang="difficultyImpossible">Impossible</button>
+                                <button type="button" class="option" i="3" val="ai" data-lang="difficultyAI">AI</button>
+                            </div>
+                        </div>
+                        <h3 data-lang="startingPlayer">Starting player:</h3>
+                        <div class="selector starting-player-selector" func="">
+                            <div class="options">
+                                <button type="button" class="option active" i="0" val="x">
+                                    <i class="ti ti-x"></i>
+                                </button>
+                                <button type="button" class="option" i="1" val="o">
+                                    <i class="ti ti-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="button start-game" onclick="startGame()" data-lang="startGame">Start game</button>
+                    </form>
+                    <div class="game">
+                        <div class="turn-text">
+                            <h3 data-lang="nowPlaying">Now playing:</h3>
+                            <i class="ti icon"></i>
+                        </div>
+                        <div class="bot-thinking-text">
+                            <p data-lang="enemyThinking">Enemy is thinking...</p>
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <div class="game-over-screen">
+                        <h3 class="game-over-text"></h3>
+                        <button type="button" class="button restart-game" onclick="restartGame('vs-bot')" data-lang="restartGame">Play again</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,84 @@
+@media(max-width: 450px) {
+    .language-select {
+        margin-left: 0 !important;
+
+        .select {
+            summary {
+                margin-left: 20px;
+            }
+
+            .mobile {
+                position: absolute;
+                width: 100vw;
+                height: 100vh;
+                top: 0;
+                left: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(2px);
+                background-color: #00000050;
+
+                .options {
+                    width: 90% !important;
+                    border: solid 1px var(--shadow-color20) !important;
+                    box-shadow: none;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 650px) {
+    .mode-selector {
+        --option-w: calc(100% - 6px) !important;
+        --option-h: 30px;
+        --option-gap: 10px;
+
+        width: 80%;
+
+        .options {
+            width: 100%;
+            flex-direction: column !important;
+            border-radius: 20px !important;
+
+            &::before {
+                transform: translateY(calc(var(--n) * calc(var(--option-h) + var(--option-gap)))) !important;
+            }
+        }
+    }
+
+    .game-container {
+        height: 65vh !important;
+
+        .game-page {
+            .selector.bot-difficulty-selector {
+                --option-w: calc(100% - 6px) !important;
+                --option-h: 30px;
+                --option-gap: 10px;
+
+                width: 100%;
+
+                .options {
+                    width: 100%;
+                    flex-direction: column !important;
+                    border-radius: 20px !important;
+
+                    &::before {
+                        transform: translateY(calc(var(--n) * calc(var(--option-h) + var(--option-gap)))) !important;
+                    }
+                }
+            }
+        }
+
+        .game {
+            .board {
+                td {
+                    width: 90px !important;
+                    height: 90px !important;
+                }
+            }
+        }
+    }
+}
