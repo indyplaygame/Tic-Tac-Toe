@@ -1,4 +1,4 @@
-import { hash, random } from "./util.js";
+import { random, API_URL } from "./util.js";
 
 export class Bot {
     #AI_SYSTEM_INSTRUCTIONS; #AI_GENERATION_CONFIG;
@@ -10,25 +10,6 @@ export class Bot {
 
         if (this.difficulty === 'impossible') {
             this.#loadCache();
-        }
-
-        if (this.difficulty === 'ai') {
-            this.#AI_SYSTEM_INSTRUCTIONS = {
-                "role": "user",
-                "parts": [
-                    {
-                        "text": `You are an AI Tic-Tac-Toe expert. Your task is to analyze a given 3x3 game board and return the best move for player X in JSON format. The board is represented as a 2D list where:\n
-                                * 0 represents an empty cell.\n
-                                * ${value} represents player X.\n
-                                * ${-value} represents player O.\n
-                                Always return the best move as a JSON object: {"row": <row_index>, "col": <col_index>}.`
-                    }
-                ]
-            };
-            this.#AI_GENERATION_CONFIG = {
-                "temperature": 1,
-                "responseMimeType": "application/json"
-            }
         }
     }
 
@@ -106,8 +87,7 @@ export class Bot {
     }
 
     #ai_move = async (board, free_cells, weights) => {
-        const apiKey = "";
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+        const url = `${API_URL}/ai/get-move`;
 
         try {
             const response = await fetch(url, {
@@ -116,19 +96,15 @@ export class Bot {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    systemInstruction: this.#AI_SYSTEM_INSTRUCTIONS,
-                    generationConfig: this.#AI_GENERATION_CONFIG,
-                    contents: [{
-                        parts: [{
-                            text: JSON.stringify(board),
-                        }]
-                    }]
+                    board: board,
+                    value: this.value
                 })
             });
 
-            const data = await response.json();
-            const move = JSON.parse(data.candidates[0].content.parts[0].text);
+            const move = await response.json();
             const [row, col] = [move.row, move.col];
+
+            if(board[row][col] !== 0) return this.#medium_move(board, free_cells, weights);
 
             return [row, col];
         } catch(error) {

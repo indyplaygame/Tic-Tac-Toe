@@ -11,6 +11,7 @@
         <script type="module" src="js/script.js" defer></script>
         <script type="module" src="js/components.js" defer></script>
         <script type="module" src="js/game.js" defer></script>
+        <script type="module" src="js/online.js" defer></script>
         <title>Tic Tac Toe</title>
     </head>
     <body data-theme="light">
@@ -34,7 +35,7 @@
             </details>
         </div>
         <i class="ti ti-help help-icon" onclick="openHelp()"></i>
-        <div class="help">
+        <div class="help hide">
             <section class="blur"></section>
             <section class="dark"></section>
             <section class="content">
@@ -44,7 +45,7 @@
                         <i class="ti ti-x close-icon" onclick="closeHelp()"></i>
                     </div>
                     <div class="text">
-                        I don't know. Ask Pablo.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
                     </div>
                 </div>
             </section>
@@ -55,12 +56,12 @@
             <div class="selector mode-selector" func="changeMode">
                 <div class="options game-modes">
                     <button type="button" class="option game-mode" i="0" val="local_pvp" data-lang="pvpLocal">PvP (Local)</button>
-                    <button type="button" class="option game-mode" i="1" val="online_pvp" data-lang="pvpOnline" disabled>PvP (Online)</button>
+                    <button type="button" class="option game-mode active" i="1" val="online_pvp" data-lang="pvpOnline">PvP (Online)</button>
                     <button type="button" class="option game-mode" i="2" val="vs_bot" data-lang="vsBot">Against Bot</button>
                 </div>
             </div>
 
-            <div class="game-container hidden">
+            <div class="game-container">
                 <div class="game-page local-pvp">
                     <form name="local-pvp-settings">
                         <label for="loc_pvp_size">
@@ -91,7 +92,58 @@
                         <button type="button" class="button restart-game" onclick="restartGame('local-pvp')" data-lang="restartGame">Play again</button>
                     </div>
                 </div>
-                <div class="game-page vs-bot active">
+                <div class="game-page online-pvp active">
+                    <div class="game-list">
+                        <div class="row">
+                            <button type="button" class="button" onclick="openCreateGame()">
+                                <i class="ti ti-plus"></i>
+                                <span data-lang="createOnlineGame">Create game</span>
+                            </button>
+                            <button type="button" class="button" onclick="refreshGameList()">
+                                <i class="ti ti-refresh"></i>
+                            </button>
+                        </div>
+                        <div class="list"></div>
+                    </div>
+                    <div class="create-game">
+                        <form name="online-game-settings">
+                            <div class="row">
+                                <i class="ti ti-chevron-left close-icon" onclick="closeCreateGame()"></i>
+                            </div>
+                            <label for="gameName">
+                                <h3 data-lang="gameName">Game name:</h3>
+                            </label>
+                            <input type="text" name="gameName" id="gameName" minlength="3" maxlength="20" required>
+                            <h3 data-lang="gameVisibility">Game visibility:</h3>
+                            <div class="selector game-visibility-selector" func="changeGameVisibility">
+                                <div class="options">
+                                    <button type="button" class="option active" i="0" val="public" data-lang="public">Public</button>
+                                    <button type="button" class="option active" i="1" val="public" data-lang="unlisted">Unlisted</button>
+                                    <button type="button" class="option" i="2" val="private" data-lang="private">Private</button>
+                                </div>
+                            </div>
+                            <div class="game-password hide">
+                                <label for="joinPassword">
+                                    <h3 data-lang="joinPassword">Join password:</h3>
+                                </label>
+                                <input type="password" name="joinPassword" id="joinPassword" minlength="3" maxlength="20">
+                            </div>
+                            <h3 data-lang="startingPlayer">Starting player:</h3>
+                            <div class="selector starting-player-selector" func="">
+                                <div class="options">
+                                    <button type="button" class="option active" i="0" val="x">
+                                        <i class="ti ti-x"></i>
+                                    </button>
+                                    <button type="button" class="option" i="1" val="o">
+                                        <i class="ti ti-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="button" onclick="createOnlineGame()" data-lang="createOnlineGame">Create game</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="game-page vs-bot">
                     <form name="vs-bot-settings">
                         <h3 data-lang="botDifficulty">Select the difficulty of the bot:</h3>
                         <div class="selector bot-difficulty-selector" func="">

@@ -5,21 +5,29 @@ const theme_switch = document.querySelector('.theme-switch input');
 const language_select = document.querySelector('.language-select');
 const game_container = document.querySelector('.game-container');
 const help_dialog = document.querySelector('.help');
+const create_online_game = document.querySelector('.online-pvp .create-game');
 
-const openHelp = () => help_dialog.style.display = 'block';
-const closeHelp = () => help_dialog.style.display = 'none';
+const openHelp = () => help_dialog.classList.remove('hide');
+const closeHelp = () => help_dialog.classList.add('hide');
+const openCreateGame = () => create_online_game.classList.remove('hide');
+const closeCreateGame = () => create_online_game.classList.add('hide');
 const changeTheme = (theme) => document.body.setAttribute("data-theme", theme);
 
 const changeMode = (mode) => {
     const local_pvp = game_container.querySelector('.local-pvp');
+    const online_pvp = game_container.querySelector('.online-pvp');
     const vs_bot = game_container.querySelector('.vs-bot');
 
     local_pvp.classList.remove('active');
+    online_pvp.classList.remove('active');
     vs_bot.classList.remove('active');
 
     switch(mode) {
         case 'local_pvp':
             local_pvp.classList.add('active');
+            break;
+        case 'online_pvp':
+            online_pvp.classList.add('active');
             break;
         case 'vs_bot':
             vs_bot.classList.add('active');
@@ -34,7 +42,7 @@ const changeLanguage = (lang) => {
     const translations = language.translations;
 
     document.documentElement.lang = lang;
-    setCookie("language", lang, 30, "/");
+    setCookie("language", lang, "/", 30);
 
     for(const key in translations) {
         const elements = document.querySelectorAll(`[data-lang="${key}"]`);
@@ -47,6 +55,15 @@ const changeLanguage = (lang) => {
     flag.src = language.flag;
     name.innerHTML = language.name;
 };
+
+const changeGameVisibility = (visibility) => {
+    const password_field = create_online_game.querySelector('.game-password');
+    const input = password_field.querySelector('input');
+    input.value = "";
+
+    if(visibility === "private") password_field.classList.remove('hide');
+    else password_field.classList.add('hide');
+}
 
 Object.keys(LANGUAGES).forEach(key => {
     const options = language_select.querySelector('.options');
@@ -61,14 +78,18 @@ Object.keys(LANGUAGES).forEach(key => {
 
 theme_switch.addEventListener('change', () => {
     changeTheme(theme_switch.checked ? "dark" : "light");
-    setCookie("theme", theme_switch.checked ? "dark" : "light", 30, "/");
+    setCookie("theme", theme_switch.checked ? "dark" : "light", "/", 30);
 });
 
 window.openHelp = openHelp;
 window.closeHelp = closeHelp;
+window.openCreateGame = openCreateGame;
+window.closeCreateGame = closeCreateGame;
 window.changeMode = changeMode;
 window.changeLanguage = changeLanguage;
+window.changeGameVisibility = changeGameVisibility;
 
 changeLanguage(getCookie("language") || "en");
 changeTheme(getCookie("theme") || "light");
 theme_switch.checked = getCookie("theme") === "dark";
+

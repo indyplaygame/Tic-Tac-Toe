@@ -1,3 +1,6 @@
+export const API_URL = "http://localhost:8080";
+export const WEBSOCKET_URL = "ws://localhost:8080";
+
 export const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -12,9 +15,10 @@ export const hash = (data) => {
     return hash;
 };
 
-export const setCookie = (cookie, value, expires, path) => {
+export const setCookie = (cookie, value, path, expires) => {
     const expiry_date = new Date().getDate() + expires * 24 * 3600000;
-    document.cookie = `${cookie}=${value}; expires=${expiry_date}; path=${path}`;
+    if(expires) document.cookie = `${cookie}=${value}; expires=${expiry_date}; path=${path}`;
+    else document.cookie = `${cookie}=${value}; path=${path}`;
 };
 
 export const getCookie = (name) => {

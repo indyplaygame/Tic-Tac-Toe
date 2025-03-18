@@ -7,7 +7,9 @@ body[data-theme="light"] {
     --bg-color: #dddddd;
     --container-bg: #e0e0e0;
     --hover-container-bg: #d2d2d2;
+    --hover-container-bg10: #d2d2d2;
     --main-bg: #e5e5e5;
+    --popup-color: #eeeeee;
     --active-color: #ffffff;
     --hover-active-color: #eeeeee;
     --input-color: #ffffff;
@@ -26,7 +28,9 @@ body[data-theme="dark"] {
     --bg-color: #333333;
     --container-bg: #555555;
     --hover-container-bg: #454545;
+    --hover-container-bg10: #656565;
     --main-bg: #454545;
+    --popup-color: #505050;
     --active-color: #6f6f6f;
     --hover-active-color: #8f8f8f;
     --input-color: #606060;

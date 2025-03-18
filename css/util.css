@@ -3,6 +3,10 @@
 # |                   Utility Classes                    | #
 # +------------------------------------------------------+ #
 ######################################################### */
+.hide {
+    display: none !important;
+}
+
 .row {
     display: flex;
     flex-direction: row;
