@@ -6,11 +6,24 @@ const language_select = document.querySelector('.language-select');
 const game_container = document.querySelector('.game-container');
 const help_dialog = document.querySelector('.help');
 const create_online_game = document.querySelector('.online-pvp .create-game');
+const join_online_game = document.querySelector('.online-pvp .join-game');
+const leave_online_game = document.querySelector('.online-pvp .leave-game');
 
 const openHelp = () => help_dialog.classList.remove('hide');
 const closeHelp = () => help_dialog.classList.add('hide');
-const openCreateGame = () => create_online_game.classList.remove('hide');
+const openCreateGame = () => {
+    create_online_game.querySelector("form").reset();
+    create_online_game.classList.remove('hide');
+};
 const closeCreateGame = () => create_online_game.classList.add('hide');
+const openJoinGame = () => {
+    join_online_game.querySelector("form").reset();
+    join_online_game.querySelector(".game-password").classList.add('hide');
+    join_online_game.classList.remove('hide');
+}
+const closeJoinGame = () => join_online_game.classList.add('hide');
+const openLeaveGame = () => leave_online_game.classList.remove('hide');
+const closeLeaveGame = () => leave_online_game.classList.add('hide');
 const changeTheme = (theme) => document.body.setAttribute("data-theme", theme);
 
 const changeMode = (mode) => {
@@ -85,6 +98,10 @@ window.openHelp = openHelp;
 window.closeHelp = closeHelp;
 window.openCreateGame = openCreateGame;
 window.closeCreateGame = closeCreateGame;
+window.openJoinGame = openJoinGame;
+window.closeJoinGame = closeJoinGame;
+window.openLeaveGame = openLeaveGame;
+window.closeLeaveGame = closeLeaveGame;
 window.changeMode = changeMode;
 window.changeLanguage = changeLanguage;
 window.changeGameVisibility = changeGameVisibility;
@@ -92,4 +109,3 @@ window.changeGameVisibility = changeGameVisibility;
 changeLanguage(getCookie("language") || "en");
 changeTheme(getCookie("theme") || "light");
 theme_switch.checked = getCookie("theme") === "dark";
-

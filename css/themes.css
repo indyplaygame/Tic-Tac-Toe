@@ -3,9 +3,21 @@
 # |                        Themes                        | #
 # +------------------------------------------------------+ #
 ######################################################### */
+body {
+    --bg-red: #fa5252;
+    --hover-bg-red: #f45e5e;
+    --border-red: #ff6e6e;
+    --bg-purple: #9f45ff;
+    --hover-bg-purple: #a972e4;
+    --checked-bg-purple: #a972e450;
+    --border-purple: #bb7bff;
+    --checked-border-purple: #bb7bff50;
+    --text-white: #eeeeee;
+}
+
 body[data-theme="light"] {
     --bg-color: #dddddd;
-    --container-bg: #e0e0e0;
+    --container-bg: #d6d6d6;
     --hover-container-bg: #d2d2d2;
     --hover-container-bg10: #d2d2d2;
     --main-bg: #e5e5e5;

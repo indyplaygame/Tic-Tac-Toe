@@ -1,5 +1,5 @@
 import { Bot } from './bot.js';
-import { LANGUAGES } from "./language.js";
+import { getTranslation } from "./util.js";
 
 const WinState = {
     Player1: 0,
@@ -168,8 +168,8 @@ class Game {
     endGame = (winner) => {
         const game_over_text = this.#game_over_screen.querySelector('.game-over-text');
 
-        if(winner === WinState.Draw) game_over_text.innerHTML = LANGUAGES[document.documentElement.lang].translations.gameTie;
-        else game_over_text.innerHTML = LANGUAGES[document.documentElement.lang].translations.gameWin.replace("{player}", `<i class='ti ${this.#players[winner].symbol}'></i>`);
+        if(winner === WinState.Draw) game_over_text.innerHTML = getTranslation('gameTie');
+        else game_over_text.innerHTML = getTranslation('gameWin').replace("{player}", `<i class='ti ${this.#players[winner].symbol}'></i>`);
 
         this.#game_over_screen.style.display = "flex";
 

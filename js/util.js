@@ -1,5 +1,13 @@
+import { LANGUAGES } from "./language.js";
+
 export const API_URL = "http://localhost:8080";
 export const WEBSOCKET_URL = "ws://localhost:8080";
+
+export const GameVisibility = {
+    PUBLIC: "PUBLIC",
+    UNLISTED: "UNLISTED",
+    PRIVATE: "PRIVATE"
+};
 
 export const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -27,4 +35,12 @@ export const getCookie = (name) => {
     if(cookie.length === 2) return cookie.pop().split(";").shift();
 
     return "";
+};
+
+export const getTranslation = (key) => {
+    return LANGUAGES[document.documentElement.lang].translations[key];
+};
+
+export const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(r => {});
 };

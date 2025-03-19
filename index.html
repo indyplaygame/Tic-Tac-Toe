@@ -6,6 +6,7 @@
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+<!--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />-->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/components.css">
         <script type="module" src="js/script.js" defer></script>
@@ -94,21 +95,80 @@
                 </div>
                 <div class="game-page online-pvp active">
                     <div class="game-list">
-                        <div class="row">
+                        <div class="row header">
                             <button type="button" class="button" onclick="openCreateGame()">
                                 <i class="ti ti-plus"></i>
                                 <span data-lang="createOnlineGame">Create game</span>
                             </button>
-                            <button type="button" class="button" onclick="refreshGameList()">
+                            <button type="button" class="button" onclick="openJoinGame()">
+                                <i class="ti ti-logout"></i>
+                                <span data-lang="joinOnlineGame">Join game</span>
+                            </button>
+                            <button type="button" class="button refresh" onclick="refreshGameList()">
                                 <i class="ti ti-refresh"></i>
                             </button>
                         </div>
                         <div class="list"></div>
                     </div>
-                    <div class="create-game">
+                    <div class="game-lobby hide">
+                        <div class="top">
+                            <div class="row">
+                                <button type="button" class="button leave-btn" onclick="openLeaveGame()">
+                                    <i class="ti ti-login"></i>
+                                    <span data-lang="leaveGame">Leave</span>
+                                </button>
+                            </div>
+                            <div class="row game-info">
+                                <div class="column">
+                                    <h2 class="game-name"></h2>
+                                    <div class="row game-uuid">
+                                        <p></p>
+                                        <i class="ti ti-copy"></i>
+                                    </div>
+                                </div>
+                                <div class="game-code">
+                                    <h3></h3>
+                                    <i class="ti ti-copy copy-code"></i>
+                                </div>
+                            </div>
+                            <div class="player-list">
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <label for="readySwitch" class="button ready-btn">
+                                <!-- TODO: Fix translations for ready -->
+                                <span data-lang="ready">Ready</span>
+                                <input type="checkbox" name="readySwitch" id="readySwitch">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="game-room hide">
+                        <div class="row">
+                            <button type="button" class="button leave-btn" onclick="openLeaveGame()">
+                                <i class="ti ti-login"></i>
+                                <span data-lang="leaveGame">Leave</span>
+                            </button>
+                        </div>
+                        <div class="game">
+                            <div class="turn-text">
+                                <h3 data-lang="nowPlaying">Now playing:</h3>
+                                <i class="ti icon"></i>
+                            </div>
+                            <div class="enemy-thinking-text">
+                                <p data-lang="enemyThinking">Enemy is thinking...</p>
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+                        <div class="game-over-screen">
+                            <h3 class="game-over-text"></h3>
+                            <button type="button" class="button restart-game" onclick="restartGame('local-pvp')" data-lang="restartGame">Play again</button>
+                        </div>
+                    </div>
+                    <div class="create-game hide">
                         <form name="online-game-settings">
                             <div class="row">
                                 <i class="ti ti-chevron-left close-icon" onclick="closeCreateGame()"></i>
+                                <h2 data-lang="createOnlineGame">Create game</h2>
                             </div>
                             <label for="gameName">
                                 <h3 data-lang="gameName">Game name:</h3>
@@ -118,29 +178,60 @@
                             <div class="selector game-visibility-selector" func="changeGameVisibility">
                                 <div class="options">
                                     <button type="button" class="option active" i="0" val="public" data-lang="public">Public</button>
-                                    <button type="button" class="option active" i="1" val="public" data-lang="unlisted">Unlisted</button>
+                                    <button type="button" class="option" i="1" val="unlisted" data-lang="unlisted">Unlisted</button>
                                     <button type="button" class="option" i="2" val="private" data-lang="private">Private</button>
                                 </div>
                             </div>
                             <div class="game-password hide">
-                                <label for="joinPassword">
-                                    <h3 data-lang="joinPassword">Join password:</h3>
+                                <label for="gamePassword">
+                                    <h3 data-lang="gamePassword">Game password:</h3>
                                 </label>
-                                <input type="password" name="joinPassword" id="joinPassword" minlength="3" maxlength="20">
+                                <input type="password" name="gamePassword" id="gamePassword" minlength="3" maxlength="20">
                             </div>
                             <h3 data-lang="startingPlayer">Starting player:</h3>
                             <div class="selector starting-player-selector" func="">
                                 <div class="options">
-                                    <button type="button" class="option active" i="0" val="x">
+                                    <button type="button" class="option" i="0" val="x">
                                         <i class="ti ti-x"></i>
                                     </button>
-                                    <button type="button" class="option" i="1" val="o">
+                                    <button type="button" class="option active" i="1" val="random">
+                                        <i class="ti ti-question-mark"></i>
+                                    </button>
+                                    <button type="button" class="option" i="2" val="o">
                                         <i class="ti ti-circle"></i>
                                     </button>
                                 </div>
                             </div>
                             <button type="button" class="button" onclick="createOnlineGame()" data-lang="createOnlineGame">Create game</button>
                         </form>
+                    </div>
+                    <div class="join-game hide">
+                        <form name="join-online-game">
+                            <div class="row">
+                                <i class="ti ti-chevron-left close-icon" onclick="closeJoinGame()"></i>
+                                <h2 data-lang="joinOnlineGame">Join game</h2>
+                            </div>
+                            <label for="gameCode">
+                                <h3 data-lang="gameCode">Game code:</h3>
+                            </label>
+                            <input type="text" minlength="6" maxlength="6" name="gameCode" id="gameCode" required>
+                            <div class="game-password hide">
+                                <label for="joinPassword">
+                                    <h3 data-lang="password">Password:</h3>
+                                </label>
+                                <input type="password" name="joinPassword" id="joinPassword" minlength="3" maxlength="20">
+                            </div>
+                            <button type="button" class="button" onclick="joinOnlineGame()" data-lang="joinOnlineGame">Join game</button>
+                        </form>
+                    </div>
+                    <div class="leave-game hide">
+                        <div class="dialog">
+                            <h3 data-lang="leaveGameConfirm">Are you sure you want to leave the game?</h3>
+                            <div class="row">
+                                <button type="button" class="button" onclick="leaveGame()" data-lang="yes">Yes</button>
+                                <button type="button" class="button" onclick="closeLeaveGame()" data-lang="no">No</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="game-page vs-bot">

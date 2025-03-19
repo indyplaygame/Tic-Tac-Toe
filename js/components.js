@@ -10,6 +10,9 @@ selectors.forEach(selector => {
     const func = window[func_name];
 
     options.forEach(option => {
+        if(option.classList.contains("active"))
+            selector.style.setProperty("--n", option.getAttribute("i"));
+
         option.addEventListener("click", () => {
             selector.style.setProperty("--n", option.getAttribute("i"));
             options.forEach(o => {
