@@ -1,4 +1,4 @@
-import {copyToClipboard, getTranslation} from "./util.js";
+import { copyToClipboard, getTranslation } from "./util.js";
 
 export class OnlineGame {
     constructor(url) {
@@ -17,6 +17,14 @@ export class OnlineGame {
             this.game_list.classList.add('hide');
             this.game_lobby.classList.remove('hide');
         };
+
+        this.socket.onclose = () => {
+            this.game_list.classList.remove('hide');
+            this.game_lobby.classList.add('hide');
+
+            const player_ready = this.ready_btn;
+            player_ready.removeEventListener('click', this.#readyButtonHandler);
+        };
     }
 
     onSocketMessage = (event) => {
@@ -25,7 +33,7 @@ export class OnlineGame {
 
         switch(type) {
             case 'on_join':
-                this.onJoin(data.game);
+                this.onJoin(data.game, data.is_owner);
                 break;
             case 'player_join':
                 this.onPlayerJoin(data.player);
@@ -33,6 +41,8 @@ export class OnlineGame {
             case 'player_leave':
                 this.onPlayerLeave(data.player_id);
                 break;
+            case 'player_symbol':
+                this.onPlayerSymbolChange(data.player_id, data.symbol);
             case 'player_ready':
                 this.onPlayerReady(data.player_id, data.ready);
                 break;
@@ -56,7 +66,27 @@ export class OnlineGame {
         this.ready_btn.querySelector('span').innerHTML = getTranslation(ready ? 'waitingForPlayers' : 'ready');
     };
 
-    onJoin = (game_data) => {
+    updateSymbols = () => {
+        const payload = [];
+
+        for(const player of this.player_list.querySelectorAll('.player-item')) {
+            const player_id = player.getAttribute('player-id');
+            const symbol_switch = player.querySelector('.symbol-switch');
+            const input = symbol_switch.querySelector('input');
+
+            payload.push({
+                player_id: Number.parseInt(player_id),
+                symbol: input.checked ? 'O' : 'X'
+            })
+        }
+
+        this.socket.send(JSON.stringify({
+            type: 'update_symbols',
+            symbols: payload
+        }));
+    };
+
+    onJoin = (game_data, is_owner) => {
         const game_name = this.game_lobby.querySelector('.game-name');
         const game_uuid = this.game_lobby.querySelector('.game-uuid');
         const game_code = this.game_lobby.querySelector('.game-code');
@@ -65,6 +95,7 @@ export class OnlineGame {
         const name = game_data.name;
         const uuid = game_data.uuid;
         const code = game_data.join_code;
+        this.player_is_owner = is_owner;
 
         game_name.innerHTML = name;
         game_uuid.querySelector('p').innerHTML = uuid;
@@ -78,16 +109,52 @@ export class OnlineGame {
         }
 
         player_ready.addEventListener('click', this.#readyButtonHandler);
+
+        this.updateSymbols();
     };
 
     onPlayerJoin = (player) => {
         const player_element = document.createElement('div');
         player_element.classList.add('player-item');
         player_element.classList.add(`player${player.id}`);
+        player_element.setAttribute('player-id', player.id);
 
         const player_name = document.createElement('h3');
         player_name.innerHTML = player.name;
         player_element.appendChild(player_name);
+
+        const end = document.createElement('div');
+        end.classList.add('end');
+
+        const symbol_switch = document.createElement('label');
+        symbol_switch.classList.add('symbol-switch');
+        symbol_switch.setAttribute('for', `player${player.id}-symbol`); {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'radio');
+            input.setAttribute('name', 'player-symbol');
+            input.setAttribute('id', `player${player.id}-symbol`);
+
+            input.click();
+
+            const slider = document.createElement('div');
+            slider.classList.add('slider');
+
+            const x = document.createElement('i');
+            x.classList.add('ti');
+            x.classList.add('ti-x');
+
+            const o = document.createElement('i');
+            o.classList.add('ti');
+            o.classList.add('ti-circle');
+
+            slider.appendChild(x);
+            slider.appendChild(o);
+            symbol_switch.appendChild(input);
+            symbol_switch.appendChild(slider);
+        }
+        if(!this.player_is_owner) symbol_switch.classList.add('disabled');
+        else symbol_switch.addEventListener('change', this.#symbolSwitchHandler);
+        end.appendChild(symbol_switch);
 
         const player_ready = document.createElement('div');
         player_ready.classList.add('player-ready'); {
@@ -100,7 +167,8 @@ export class OnlineGame {
             icon.classList.add(player.ready ? 'ti-check' : 'ti-x');
             player_ready.appendChild(icon);
         }
-        player_element.appendChild(player_ready);
+        end.appendChild(player_ready);
+        player_element.appendChild(end);
 
         this.player_list.appendChild(player_element);
     };
@@ -108,6 +176,14 @@ export class OnlineGame {
     onPlayerLeave = (player_id) => {
         const player_item = this.player_list.querySelector(`.player${player_id}`);
         player_item.remove();
+    };
+
+    onPlayerSymbolChange = (player_id, symbol) => {
+        const player_item = this.player_list.querySelector(`.player${player_id}`);
+        const symbol_switch = player_item.querySelector('.symbol-switch');
+        const input = symbol_switch.querySelector('input');
+
+        input.checked = symbol === 'O';
     };
 
     onPlayerReady = (player_id, ready) => {
@@ -125,11 +201,6 @@ export class OnlineGame {
 
     leave = () => {
         this.socket.close();
-        this.game_list.classList.remove('hide');
-        this.game_lobby.classList.add('hide');
-
-        const player_ready = this.ready_btn;
-        player_ready.removeEventListener('click', this.#readyButtonHandler);
     };
 
     startGame = () => {
@@ -157,7 +228,16 @@ export class OnlineGame {
             }
             this.board_element.appendChild(row);
         }
+
+        this.lockBoard(true);
+    };
+
+    lockBoard = (lock) => {
+        if(lock) this.board_element.classList.add("locked");
+        else this.board_element.classList.remove("locked");
     };
 
     #readyButtonHandler = (event) => this.updateReadiness(this.ready_btn.querySelector('input').checked);
+
+    #symbolSwitchHandler = (event) => this.updateSymbols();
 }

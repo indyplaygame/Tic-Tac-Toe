@@ -7,6 +7,11 @@
     display: none !important;
 }
 
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .row {
     display: flex;
     flex-direction: row;

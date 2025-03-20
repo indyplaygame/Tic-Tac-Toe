@@ -4,8 +4,8 @@
 # +------------------------------------------------------+ #
 ######################################################### */
 body {
-    --bg-red: #fa5252;
-    --hover-bg-red: #f45e5e;
+    --bg-red: #f45e5e;
+    --hover-bg-red: #fa525280;
     --border-red: #ff6e6e;
     --bg-purple: #9f45ff;
     --hover-bg-purple: #a972e4;
@@ -13,6 +13,8 @@ body {
     --border-purple: #bb7bff;
     --checked-border-purple: #bb7bff50;
     --text-white: #eeeeee;
+    --theme-switch-bg: #cccccc;
+    --theme-switch-slider: #ffffff;
 }
 
 body[data-theme="light"] {
@@ -25,6 +27,8 @@ body[data-theme="light"] {
     --active-color: #ffffff;
     --hover-active-color: #eeeeee;
     --input-color: #ffffff;
+    --switch-color: #e5e5e5;
+    --switch-slider-color: #a0a0a090;
     --border-color: #cccccc;
     --hover-border-color: #bbbbbb;
     --border-color20: #aaaaaa;
@@ -46,6 +50,8 @@ body[data-theme="dark"] {
     --active-color: #6f6f6f;
     --hover-active-color: #8f8f8f;
     --input-color: #606060;
+    --switch-color: #606060;
+    --switch-slider-color: #26262690;
     --border-color: #777777;
     --hover-border-color: #888888;
     --border-color20: #999999;

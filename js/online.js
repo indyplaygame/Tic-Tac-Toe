@@ -20,8 +20,9 @@ const verifyToken = async (token) => {
 
     try {
         const response = await fetch(url, {method: "POST"});
+        const data = await response.json();
 
-        return response.status === 200;
+        return Number.parseInt(data.status) === 200;
     } catch(error) {
         console.error(`An error occurred while verifying the token: ${error}`);
         return false;

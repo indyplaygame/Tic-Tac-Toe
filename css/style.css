@@ -135,7 +135,7 @@ div.language-select {
     }
 
     .slider {
-        background-color: #cccccc;
+        background-color: var(--theme-switch-bg);
         box-shadow: 0 0 5px 1px var(--shadow-color);
         transition: .4s;
         border-radius: 20px;
@@ -144,8 +144,8 @@ div.language-select {
         width: 52px;
     }
 
-    .slider:before {
-        background-color: white;
+    .slider::before {
+        background-color: var(--theme-switch-slider);
         position: absolute;
         top: 3px;
         left: 3px;
@@ -428,11 +428,64 @@ div.language-select {
                             padding: 10px;
                             box-sizing: border-box;
 
-                            .player-ready {
+                            .end {
                                 display: flex;
-                                justify-content: center;
+                                flex-direction: row;
                                 align-items: center;
-                                gap: 10px;
+                                gap: 20px;
+
+                                .symbol-switch {
+                                    cursor: pointer;
+                                    font-size: 20px;
+
+                                    input {
+                                        display: none;
+                                    }
+
+                                    .slider {
+                                        background-color: var(--switch-color);
+                                        position: relative;
+                                        box-shadow: 0 0 10px 1px var(--shadow-color);
+                                        transition: .4s;
+                                        border-radius: 13px;
+                                        cursor: pointer;
+                                        height: 50px;
+                                        width: 103px;
+                                        font-size: 40px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-evenly;
+                                        gap: 3px;
+
+                                        i {
+                                            width: 50%;
+                                            text-align: center;
+                                        }
+
+                                        &::before {
+                                            background-color: var(--switch-slider-color);
+                                            position: absolute;
+                                            top: 3px;
+                                            left: 3px;
+                                            height: 44px;
+                                            width: 44px;
+                                            transition: .4s;
+                                            content: '';
+                                            border-radius: 12px;
+                                        }
+
+                                        input:checked + &::before {
+                                            transform: translateX(53px);
+                                        }
+                                    }
+                                }
+
+                                .player-ready {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    gap: 10px;
+                                }
                             }
                         }
                     }
@@ -693,6 +746,10 @@ div.language-select {
         }
 
         .board {
+            &.locked {
+                pointer-events: none;
+            }
+
             tr {
                 td {
                     aspect-ratio: 1;

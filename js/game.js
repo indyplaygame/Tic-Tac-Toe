@@ -91,8 +91,8 @@ class Game {
     }
 
     lockBoard = (lock) => {
-        if(lock) this.#board_element.style.pointerEvents = "none";
-        else this.#board_element.style.pointerEvents = "auto";
+        if(lock) this.#board_element.classList.add("locked");
+        else this.#board_element.classList.remove("locked");
     }
 
     playerMove = (event) => {
