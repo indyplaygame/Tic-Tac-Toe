@@ -1,8 +1,10 @@
 import { setCookie, getCookie } from "./util.js";
+import { auth, joinGame, refreshGameList } from "./online.js";
 import { LANGUAGES } from "./language.js";
 
 const theme_switch = document.querySelector('.theme-switch input');
 const language_select = document.querySelector('.language-select');
+const mode_selector = document.querySelector('.mode-selector');
 const game_container = document.querySelector('.game-container');
 const help_dialog = document.querySelector('.help');
 const create_online_game = document.querySelector('.online-pvp .create-game');
@@ -109,3 +111,23 @@ window.changeGameVisibility = changeGameVisibility;
 changeLanguage(getCookie("language") || "en");
 changeTheme(getCookie("theme") || "light");
 theme_switch.checked = getCookie("theme") === "dark";
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await auth();
+    await refreshGameList();
+
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('local-pvp')) mode_selector.querySelector('.option[val="local_pvp"]').click();
+    if(params.has('online-pvp')) mode_selector.querySelector('.option[val="online_pvp"]').click();
+    if(params.has('vs-bot')) mode_selector.querySelector('.option[val="vs_bot"]').click();
+
+    if(params.has('join')) {
+        const game_id = params.get('join');
+        if(!game_id) return;
+
+        const password = params.get('password');
+
+        mode_selector.querySelector('.option[val="online_pvp"]').click();
+        await joinGame(game_id, password);
+    }
+});

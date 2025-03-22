@@ -3,3 +3,24 @@
         transform: rotate(1turn)
     }
 }
+
+@keyframes disappear {
+    0% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes progress-reverse {
+    0% {
+        width: 100%;
+    }
+    100% {
+        width: 0;
+    }
+}

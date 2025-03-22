@@ -171,15 +171,15 @@ class Game {
         if(winner === WinState.Draw) game_over_text.innerHTML = getTranslation('gameTie');
         else game_over_text.innerHTML = getTranslation('gameWin').replace("{player}", `<i class='ti ${this.#players[winner].symbol}'></i>`);
 
-        this.#game_over_screen.style.display = "flex";
+        this.#game_over_screen.classList.remove('hide');
 
         return true;
     }
 
     toggleBotThinking = (thinking) => {
         const bot_thinking_text = this.#game_element.querySelector('.bot-thinking-text');
-        if(thinking) bot_thinking_text.style.visibility = "visible";
-        else bot_thinking_text.style.visibility = "hidden";
+        if(thinking) bot_thinking_text.classList.remove('invisible');
+        else bot_thinking_text.classList.add('invisible');
     }
 
     static startLocalPvP() {
@@ -233,8 +233,6 @@ window.restartGame = (game_mode) => {
 
     settings.style.display = 'flex';
     game_element.style.display = 'none';
-    game_over_element.style.display = 'none';
+    game_over_element.classList.add("hide");
     board_element.remove();
 }
-
-// window.startGame();

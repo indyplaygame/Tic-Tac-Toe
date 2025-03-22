@@ -1,4 +1,15 @@
-import { copyToClipboard, getTranslation } from "./util.js";
+import { copyToClipboard, getCookie, getTranslation, BASE_URL } from "./util.js";
+
+const SYMBOLS = {
+    'x': 'ti-x',
+    'o': 'ti-circle'
+}
+
+const WinState = {
+    WIN: "WIN",
+    DRAW: "DRAW",
+    LOSS: "LOSS"
+}
 
 export class OnlineGame {
     constructor(url) {
@@ -8,22 +19,37 @@ export class OnlineGame {
         this.game_list = document.querySelector('.game-page.online-pvp .game-list');
         this.game_lobby = document.querySelector('.game-page.online-pvp .game-lobby');
         this.game_room = document.querySelector('.game-page.online-pvp .game-room');
+        this.game_over_screen = document.querySelector('.game-page.online-pvp .game-over-screen');
         this.player_list = this.game_lobby.querySelector('.player-list');
         this.ready_btn = this.game_lobby.querySelector('.ready-btn');
 
         this.game_element = document.querySelector('.game-page.online-pvp .game');
+        this.board_element = null;
+        this.turn_icon = this.game_element.querySelector('.turn-text .icon');
+        this.enemy_thinking_text = this.game_element.querySelector('.enemy-thinking-text');
 
         this.socket.onopen = () => {
             this.game_list.classList.add('hide');
             this.game_lobby.classList.remove('hide');
+
+            this.socket.send(JSON.stringify({
+                "type": "auth",
+                "token": getCookie("token")
+            }));
         };
 
         this.socket.onclose = () => {
             this.game_list.classList.remove('hide');
             this.game_lobby.classList.add('hide');
+            this.game_room.classList.add('hide');
+            this.game_over_screen.classList.add('hide');
 
             const player_ready = this.ready_btn;
+            player_ready.querySelector('span').innerHTML = getTranslation('ready');
+            player_ready.querySelector('input').checked = false;
             player_ready.removeEventListener('click', this.#readyButtonHandler);
+
+            if(this.board_element) this.board_element.remove();
         };
     }
 
@@ -43,19 +69,25 @@ export class OnlineGame {
                 break;
             case 'player_symbol':
                 this.onPlayerSymbolChange(data.player_id, data.symbol);
+                break;
             case 'player_ready':
                 this.onPlayerReady(data.player_id, data.ready);
                 break;
+            case 'player_move':
+                this.onPlayerMove(data.move);
+                break;
             case 'game_start':
-                this.startGame();
+                this.startGame(data);
+                break;
+            case 'game_turn':
+                this.gameTurn();
+                break;
+            case 'game_end':
+                this.endGame(data);
                 break;
             default:
                 console.log(data);
         }
-    };
-
-    websocketTest = () => {
-        this.socket.send(JSON.stringify({test: "test"}));
     };
 
     updateReadiness = (ready) => {
@@ -67,6 +99,8 @@ export class OnlineGame {
     };
 
     updateSymbols = () => {
+        if(!this.player_is_owner) return;
+
         const payload = [];
 
         for(const player of this.player_list.querySelectorAll('.player-item')) {
@@ -97,10 +131,10 @@ export class OnlineGame {
         const code = game_data.join_code;
         this.player_is_owner = is_owner;
 
-        game_name.innerHTML = name;
-        game_uuid.querySelector('p').innerHTML = uuid;
-        game_uuid.addEventListener('click', () => copyToClipboard(uuid));
-        game_code.querySelector('h3').innerHTML = code;
+        game_name.textContent = name;
+        game_uuid.querySelector('p').textContent = uuid;
+        game_uuid.addEventListener('click', () => copyToClipboard(`${BASE_URL}?join=${uuid}`));
+        game_code.querySelector('h3').textContent = code;
         game_code.querySelector('.copy-code').addEventListener('click', () => copyToClipboard(code));
 
         this.player_list.innerHTML = '';
@@ -109,14 +143,11 @@ export class OnlineGame {
         }
 
         player_ready.addEventListener('click', this.#readyButtonHandler);
-
-        this.updateSymbols();
     };
 
     onPlayerJoin = (player) => {
         const player_element = document.createElement('div');
-        player_element.classList.add('player-item');
-        player_element.classList.add(`player${player.id}`);
+        player_element.classList.add('player-item', `player${player.id}`);
         player_element.setAttribute('player-id', player.id);
 
         const player_name = document.createElement('h3');
@@ -127,6 +158,8 @@ export class OnlineGame {
         end.classList.add('end');
 
         const symbol_switch = document.createElement('label');
+        if(!this.player_is_owner) symbol_switch.classList.add('disabled');
+        else symbol_switch.addEventListener('change', this.#symbolSwitchHandler);
         symbol_switch.classList.add('symbol-switch');
         symbol_switch.setAttribute('for', `player${player.id}-symbol`); {
             const input = document.createElement('input');
@@ -140,20 +173,16 @@ export class OnlineGame {
             slider.classList.add('slider');
 
             const x = document.createElement('i');
-            x.classList.add('ti');
-            x.classList.add('ti-x');
+            x.classList.add('ti', 'ti-x');
 
             const o = document.createElement('i');
-            o.classList.add('ti');
-            o.classList.add('ti-circle');
+            o.classList.add('ti', 'ti-circle');
 
             slider.appendChild(x);
             slider.appendChild(o);
             symbol_switch.appendChild(input);
             symbol_switch.appendChild(slider);
         }
-        if(!this.player_is_owner) symbol_switch.classList.add('disabled');
-        else symbol_switch.addEventListener('change', this.#symbolSwitchHandler);
         end.appendChild(symbol_switch);
 
         const player_ready = document.createElement('div');
@@ -171,6 +200,8 @@ export class OnlineGame {
         player_element.appendChild(end);
 
         this.player_list.appendChild(player_element);
+
+        this.updateSymbols();
     };
 
     onPlayerLeave = (player_id) => {
@@ -199,11 +230,24 @@ export class OnlineGame {
         text.innerHTML = ready ? getTranslation('ready') : getTranslation('notReady');
     };
 
+    onPlayerMove = (move) => {
+        const row = move.row;
+        const col = move.col;
+        const symbol = move.symbol;
+        const value = move.value;
+
+        const cell = this.board_element.querySelector(`[row="${row}"][col="${col}"]`);
+
+        this.board[row][col] = value;
+        cell.innerHTML = `<i class='ti ${SYMBOLS[symbol.toLowerCase()]}'></i>`;
+        cell.removeEventListener("click", this.playerMove);
+    };
+
     leave = () => {
         this.socket.close();
     };
 
-    startGame = () => {
+    startGame = (data) => {
         this.game_lobby.classList.add('hide');
         this.game_room.classList.remove('hide');
 
@@ -222,6 +266,7 @@ export class OnlineGame {
                 div.classList.add("cell");
                 div.setAttribute("row", i.toString());
                 div.setAttribute("col", j.toString());
+                div.addEventListener("click", this.playerMove);
 
                 cell.appendChild(div);
                 row.appendChild(cell);
@@ -232,12 +277,79 @@ export class OnlineGame {
         this.lockBoard(true);
     };
 
-    lockBoard = (lock) => {
-        if(lock) this.board_element.classList.add("locked");
-        else this.board_element.classList.remove("locked");
+    gameTurn = () => {
+        this.lockBoard(false);
     };
 
-    #readyButtonHandler = (event) => this.updateReadiness(this.ready_btn.querySelector('input').checked);
+    endGame = (data) => {
+        const game_over_text = this.game_over_screen.querySelector('.game-over-text');
+        this.enemy_thinking_text.classList.add("invisible");
 
-    #symbolSwitchHandler = (event) => this.updateSymbols();
+        const winner = data.winner;
+        switch(data.state) {
+            case WinState.WIN:
+                game_over_text.innerHTML = getTranslation('gameWon');
+                break;
+            case WinState.LOSS:
+                game_over_text.innerHTML = getTranslation('gameWin').replace('{player}', `<i class='ti ${SYMBOLS[winner.symbol.toLowerCase()]}'></i>`);
+                break;
+            case WinState.DRAW:
+                game_over_text.innerHTML = getTranslation('gameTie');
+                break;
+        }
+
+        this.game_over_screen.classList.remove('hide');
+
+        const play_again_btn = this.game_over_screen.querySelector('.button.restart-game');
+        const leave_game_btn = this.game_over_screen.querySelector('.button.leave-game-btn');
+
+        play_again_btn.addEventListener('click', this.playAgain);
+        leave_game_btn.addEventListener('click', this.leave)
+    }
+
+    playAgain = () => {
+        this.game_lobby.classList.remove('hide');
+        this.game_room.classList.add('hide');
+        this.game_over_screen.classList.add('hide');
+
+        const player_ready = this.ready_btn;
+        player_ready.querySelector('span').innerHTML = getTranslation('ready');
+        player_ready.querySelector('input').checked = false;
+
+        this.game_element.querySelectorAll('.board').forEach(board => board.remove());
+    };
+
+    playerMove = (event) => {
+        const cell = event.target;
+        const row = parseInt(cell.getAttribute("row"));
+        const col = parseInt(cell.getAttribute("col"));
+
+        if(this.board[row][col] !== 0) return;
+
+        this.socket.send(JSON.stringify({
+            type: 'move',
+            row: row,
+            col: col
+        }));
+
+        this.lockBoard(true);
+    };
+
+    lockBoard = (lock) => {
+        if(lock) {
+            this.board_element.classList.add("locked");
+            this.enemy_thinking_text.classList.remove("invisible");
+        } else {
+            this.board_element.classList.remove("locked");
+            this.enemy_thinking_text.classList.add("invisible");
+        }
+    };
+
+    #readyButtonHandler = (event) => {
+        this.updateReadiness(this.ready_btn.querySelector('input').checked);
+    }
+
+    #symbolSwitchHandler = (event) => {
+        this.updateSymbols();
+    }
 }

@@ -522,6 +522,7 @@ div.language-select {
                 width: 100%;
                 height: 100%;
                 box-sizing: border-box;
+                position: relative;
 
                 .game {
                     width: 100%;
@@ -534,7 +535,7 @@ div.language-select {
 
                     .enemy-thinking-text {
                         display: flex;
-                        visibility: hidden;
+                        visibility: visible;
                         flex-direction: row;
                         justify-content: center;
                         align-items: center;
@@ -548,7 +549,6 @@ div.language-select {
                     }
                 }
             }
-
             .create-game, .join-game, .leave-game {
                 display: flex;
                 position: absolute;
@@ -676,7 +676,8 @@ div.language-select {
         
         .game-over-screen {
             position: absolute;
-            display: none;
+            top: 0;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -699,6 +700,11 @@ div.language-select {
 
             .button.restart-game {
                 margin-top: 20px;
+                width: 250px;
+            }
+
+            .button.leave-game-btn {
+                margin-top: 10px;
                 width: 250px;
             }
         }
@@ -788,5 +794,75 @@ div.language-select {
         margin-bottom: -50vh;
         opacity: 0;
         pointer-events: none;
+    }
+}
+
+/* #########################################################
+# +------------------------------------------------------+ #
+# |                Success/Error Messages                | #
+# +------------------------------------------------------+ #
+######################################################### */
+.messages {
+    z-index: 100;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 10px;
+
+    .message {
+        --duration: 4s;
+
+        padding: 16px;
+        box-shadow: 0 0 5px 1px var(--shadow-color);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 200px;
+        max-width: 80%;
+        animation: ease var(--duration) disappear forwards;
+        position: relative;
+        gap: 20px;
+
+        p {
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .ti {
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-bottom: solid 3px red;
+            left: 0;
+            animation: ease progress-reverse var(--duration) forwards;
+        }
+
+        &.success {
+            background-color: var(--success-bg);
+            border-bottom: solid 2px var(--success-border);
+
+            .progress {
+                border-bottom: solid 3px var(--success-progress);
+            }
+        }
+
+        &.error {
+            background-color: var(--error-bg);
+            border-bottom: solid 2px var(--error-border);
+
+            .progress {
+                border-bottom: solid 3px var(--error-progress);
+            }
+        }
     }
 }

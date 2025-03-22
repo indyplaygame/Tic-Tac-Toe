@@ -1,5 +1,6 @@
 import { LANGUAGES } from "./language.js";
 
+export const BASE_URL = window.location.href.replace(window.location.search, '');
 export const API_URL = "http://localhost:8080";
 export const WEBSOCKET_URL = "ws://localhost:8080";
 
@@ -23,10 +24,17 @@ export const hash = (data) => {
     return hash;
 };
 
-export const setCookie = (cookie, value, path, expires) => {
-    const expiry_date = new Date().getDate() + expires * 24 * 3600000;
-    if(expires) document.cookie = `${cookie}=${value}; expires=${expiry_date}; path=${path}`;
-    else document.cookie = `${cookie}=${value}; path=${path}`;
+export const setCookie = (name, value, path, expires, options) => {
+    let cookie = `${name}=${value}; path=${path}`;
+
+    if(expires) cookie += `; max-age=${expires * 24 * 3600}`;
+
+    if(options) {
+        if(options.secure) cookie += "; Secure";
+        if(options.same_site) cookie += `; SameSite=${options.same_site}`;
+    }
+
+    document.cookie = cookie;
 };
 
 export const getCookie = (name) => {
@@ -44,3 +52,28 @@ export const getTranslation = (key) => {
 export const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(r => {});
 };
+
+export const showMessage = (type, message, duration) => {
+    const messages = document.querySelector('.messages');
+
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("message", type);
+
+    const text = document.createElement("p");
+    text.textContent = message;
+    messageElement.appendChild(text);
+
+    const close = document.createElement("i");
+    close.classList.add("ti", "ti-x");
+    close.addEventListener('click', () => messageElement.remove());
+    messageElement.appendChild(close);
+
+    const progress = document.createElement("div");
+    progress.classList.add("progress");
+    messageElement.appendChild(progress);
+
+    if(duration) messageElement.style.setProperty("--duration", `${duration}ms`);
+    setTimeout(() => messageElement.remove(), duration || 4000);
+
+    messages.appendChild(messageElement);
+}

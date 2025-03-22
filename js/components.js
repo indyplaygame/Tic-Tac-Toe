@@ -45,10 +45,10 @@ selects.forEach(select => {
             if(func) func(val);
         });
     });
-})
+});
 
-// document.addEventListener("click", () => {
-//     selects.forEach(select => {
-//         select.removeAttribute("open");
-//     });
-// });
+document.body.addEventListener("click", () => {
+    selects.forEach(select => {
+        select.removeAttribute("open");
+    });
+});

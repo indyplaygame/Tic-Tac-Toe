@@ -1,4 +1,4 @@
-import { setCookie, getCookie, getTranslation, API_URL, WEBSOCKET_URL, GameVisibility } from "./util.js";
+import { setCookie, getCookie, getTranslation, showMessage, API_URL, WEBSOCKET_URL, GameVisibility } from "./util.js";
 import { OnlineGame } from "./online_game.js";
 
 let onlineGame;
@@ -64,7 +64,7 @@ const createOnlineGame = async () => {
 
         await joinGame(game_id, password);
     } catch(error) {
-        console.error(`An error occurred while creating the online game: ${error}`);
+        showMessage('error', getTranslation('createGameError'))
     }
 };
 
@@ -72,11 +72,12 @@ const joinGame = async (gameId, password) => {
     const url = password ? `${WEBSOCKET_URL}/game/join/${gameId}?pass=${password}` : `${WEBSOCKET_URL}/game/join/${gameId}`;
 
     try {
+        if(onlineGame) onlineGame.leave();
         onlineGame = new OnlineGame(url);
 
         closeCreateGame();
     } catch(error) {
-        console.error(`An error occurred while joining the online game: ${error}`);
+        showMessage('error', getTranslation('joinGameError'));
     }
 };
 
@@ -90,6 +91,8 @@ const joinOnlineGame = async () => {
         const response = await fetch(url);
 
         const data = await response.json();
+        if(!data.uuid) return;
+
         if(data.visibility === GameVisibility.PRIVATE && password === "") {
             const password_field = join_game_form.querySelector('.game-password');
             password_field.classList.remove('hide');
@@ -98,7 +101,7 @@ const joinOnlineGame = async () => {
             closeJoinGame();
         }
     } catch(error) {
-        console.error(`An error occurred while joining the online game: ${error}`);
+        showMessage('error', getTranslation('joinGameError'));
     }
 };
 
@@ -115,11 +118,12 @@ const listOnlineGames = async () => {
 
         return await response.json();
     } catch(error) {
-        console.error(`An error occurred while listing the online games: ${error}`);
+        showMessage('error', getTranslation('listGamesError'));
+        return null;
     }
 };
 
-const auth = async () => {
+export const auth = async () => {
     let token = getCookie("token");
     if(token)
         if(await verifyToken(token)) return;
@@ -133,14 +137,14 @@ const auth = async () => {
         return;
     }
 
-    setCookie("token", token, "/");
+    setCookie("token", token, "/", 0, {secure: true, same_site: "None"});
 };
 
-const refreshGameList = async () => {
+export const refreshGameList = async () => {
     const games = await listOnlineGames();
     const gameList = document.querySelector('.game-page.online-pvp .game-list .list');
 
-    if(games.length === 0) {
+    if(games === null || games.length === 0) {
         gameList.innerHTML = "<p>No games found</p>";
         return;
     }
@@ -154,16 +158,16 @@ const refreshGameList = async () => {
         column.classList.add('column');
 
         const name = document.createElement('h3');
-        name.innerHTML = game.name;
+        name.textContent = game.name;
         column.appendChild(name);
 
         const gameId = document.createElement('p');
-        gameId.innerHTML = game.uuid;
+        gameId.textContent = game.uuid;
         column.appendChild(gameId);
         element.appendChild(column);
 
         const players = document.createElement('p');
-        players.innerHTML = `${game.player_count} ${game.player_count !== 1 ? getTranslation('players') : getTranslation('player')}`;
+        players.textContent = `${game.player_count} ${game.player_count !== 1 ? getTranslation('players') : getTranslation('player')}`;
         element.appendChild(players);
 
         element.addEventListener('click', () => {
@@ -185,11 +189,4 @@ window.joinOnlineGame = joinOnlineGame;
 window.refreshGameList = refreshGameList;
 window.leaveGame = leaveGame;
 
-window.test = () => {
-    onlineGame.websocketTest();
-};
-
-document.addEventListener('DOMContentLoaded', async () => {
-    await auth();
-    await refreshGameList();
-});
+export { joinGame };

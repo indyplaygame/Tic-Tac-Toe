@@ -1,4 +1,4 @@
-import { random, API_URL } from "./util.js";
+import { random, showMessage, getTranslation, API_URL } from "./util.js";
 
 export class Bot {
     #AI_SYSTEM_INSTRUCTIONS; #AI_GENERATION_CONFIG;
@@ -108,7 +108,7 @@ export class Bot {
 
             return [row, col];
         } catch(error) {
-            console.error(`An error occurred while fetching the AI move: ${error}`);
+            showMessage('error', getTranslation('aiMoveError'));
             return this.#medium_move(board, free_cells, weights);
         }
     }

@@ -57,12 +57,12 @@
             <div class="selector mode-selector" func="changeMode">
                 <div class="options game-modes">
                     <button type="button" class="option game-mode" i="0" val="local_pvp" data-lang="pvpLocal">PvP (Local)</button>
-                    <button type="button" class="option game-mode active" i="1" val="online_pvp" data-lang="pvpOnline">PvP (Online)</button>
+                    <button type="button" class="option game-mode" i="1" val="online_pvp" data-lang="pvpOnline">PvP (Online)</button>
                     <button type="button" class="option game-mode" i="2" val="vs_bot" data-lang="vsBot">Against Bot</button>
                 </div>
             </div>
 
-            <div class="game-container">
+            <div class="game-container hidden">
                 <div class="game-page local-pvp">
                     <form name="local-pvp-settings">
                         <label for="loc_pvp_size">
@@ -88,12 +88,12 @@
                             <i class="ti icon"></i>
                         </div>
                     </div>
-                    <div class="game-over-screen">
+                    <div class="game-over-screen hide">
                         <h3 class="game-over-text"></h3>
                         <button type="button" class="button restart-game" onclick="restartGame('local-pvp')" data-lang="restartGame">Play again</button>
                     </div>
                 </div>
-                <div class="game-page online-pvp active">
+                <div class="game-page online-pvp">
                     <div class="game-list">
                         <div class="row header">
                             <button type="button" class="button" onclick="openCreateGame()">
@@ -154,14 +154,10 @@
                                 <h3 data-lang="nowPlaying">Now playing:</h3>
                                 <i class="ti icon"></i>
                             </div>
-                            <div class="enemy-thinking-text">
+                            <div class="enemy-thinking-text invisible">
                                 <p data-lang="enemyThinking">Enemy is thinking...</p>
                                 <div class="loader"></div>
                             </div>
-                        </div>
-                        <div class="game-over-screen">
-                            <h3 class="game-over-text"></h3>
-                            <button type="button" class="button restart-game" onclick="restartGame('local-pvp')" data-lang="restartGame">Play again</button>
                         </div>
                     </div>
                     <div class="create-game hide">
@@ -233,6 +229,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="game-over-screen hide">
+                        <h3 class="game-over-text"></h3>
+                        <button type="button" class="button restart-game" data-lang="restartGame">Play again</button>
+                        <button type="button" class="button leave-game-btn" data-lang="leaveGame">Leave</button>
+                    </div>
                 </div>
                 <div class="game-page vs-bot">
                     <form name="vs-bot-settings">
@@ -263,17 +264,18 @@
                             <h3 data-lang="nowPlaying">Now playing:</h3>
                             <i class="ti icon"></i>
                         </div>
-                        <div class="bot-thinking-text">
+                        <div class="bot-thinking-text invisible">
                             <p data-lang="enemyThinking">Enemy is thinking...</p>
                             <div class="loader"></div>
                         </div>
                     </div>
-                    <div class="game-over-screen">
+                    <div class="game-over-screen hide">
                         <h3 class="game-over-text"></h3>
                         <button type="button" class="button restart-game" onclick="restartGame('vs-bot')" data-lang="restartGame">Play again</button>
                     </div>
                 </div>
             </div>
         </main>
+        <div class="messages"></div>
     </body>
 </html>
