@@ -12,15 +12,15 @@ body {
     --checked-bg-purple: #a972e450;
     --border-purple: #bb7bff;
     --checked-border-purple: #bb7bff50;
-    --text-white: #eeeeee;
-    --theme-switch-bg: #cccccc;
-    --theme-switch-slider: #ffffff;
     --success-bg: #51cf6660;
     --success-border: #aaffb660;
     --success-progress: #51cf66cc;
     --error-bg: #cf516660;
     --error-border: #ffaab660;
     --error-progress: #cf5166cc;
+    --text-white: #eeeeee;
+    --theme-switch-bg: #cccccc;
+    --theme-switch-slider: #ffffff;
 }
 
 body[data-theme="light"] {

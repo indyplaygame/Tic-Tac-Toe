@@ -1,5 +1,14 @@
-import { setCookie, getCookie, getTranslation, showMessage, API_URL, WEBSOCKET_URL, GameVisibility } from "./util.js";
 import { OnlineGame } from "./online_game.js";
+import {
+    setCookie,
+    getCookie,
+    getTranslation,
+    showMessage,
+    API_URL,
+    WEBSOCKET_URL,
+    GameVisibility,
+    HttpStatus, HttpStatusCode
+} from "./util.js";
 
 let onlineGame;
 
@@ -20,9 +29,14 @@ const verifyToken = async (token) => {
 
     try {
         const response = await fetch(url, {method: "POST"});
-        const data = await response.json();
 
-        return Number.parseInt(data.status) === 200;
+        if(response.status !== HttpStatus.OK) {
+            console.error(`An error occurred while verifying the token: ${response.status}`);
+            return false;
+        }
+
+        const data = await response.json();
+        return Number.parseInt(data.status) === HttpStatus.OK;
     } catch(error) {
         console.error(`An error occurred while verifying the token: ${error}`);
         return false;
@@ -37,12 +51,22 @@ const createOnlineGame = async () => {
     if(!token) return;
 
     const name = settings.gameName.value;
+    if(!name.match(/[a-zA-Z0-9 ]{3,20}/)) {
+        showMessage('error', getTranslation('invalidGameName'));
+        return;
+    }
+
     const visibility = settings.querySelector('.game-visibility-selector .options .option.active')
-        .getAttribute('val');
+        .getAttribute('val').toUpperCase();
     const starting_player = settings.querySelector('.starting-player-selector .options .option.active')
         .getAttribute('val');
 
-    const password = visibility === "private" ? settings.gamePassword.value : "";
+    const password = visibility === GameVisibility.PRIVATE ? settings.gamePassword.value : "";
+
+    if(visibility === GameVisibility.PRIVATE && !password.match(/^[a-zA-Z0-9!@#$%^&*-_]{6,20}$/)) {
+        showMessage('error', getTranslation('invalidPasswordFormat'));
+        return;
+    }
 
     try {
         const response = await fetch(url, {
@@ -59,10 +83,16 @@ const createOnlineGame = async () => {
             })
         });
 
+        if(response.status !== HttpStatus.CREATED) {
+            showMessage('error', getTranslation('createGameError') + ` (${response.status} ${HttpStatusCode[response.status]})`);
+            return;
+        }
+
         const data = await response.json();
         const game_id = data["game_id"];
 
         await joinGame(game_id, password);
+        closeCreateGame();
     } catch(error) {
         showMessage('error', getTranslation('createGameError'))
     }
@@ -74,8 +104,6 @@ const joinGame = async (gameId, password) => {
     try {
         if(onlineGame) onlineGame.leave();
         onlineGame = new OnlineGame(url);
-
-        closeCreateGame();
     } catch(error) {
         showMessage('error', getTranslation('joinGameError'));
     }
@@ -86,9 +114,19 @@ const joinOnlineGame = async () => {
     const gameCode = join_game_form.gameCode.value;
     const password = join_game_form.joinPassword.value;
 
+    if(!gameCode.match(/[a-zA-Z0-9]{6}/)) {
+        showMessage('error', getTranslation('invalidGameCode'));
+        return;
+    }
+
     try {
         const url = `${API_URL}/game/resolve/${gameCode}`;
         const response = await fetch(url);
+
+        if(response.status === HttpStatus.NOT_FOUND) {
+            showMessage('error', getTranslation('gameNotFound'));
+            return;
+        }
 
         const data = await response.json();
         if(!data.uuid) return;

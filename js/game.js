@@ -1,5 +1,5 @@
 import { Bot } from './bot.js';
-import { getTranslation } from "./util.js";
+import { getTranslation,  showMessage } from "./util.js";
 
 const WinState = {
     Player1: 0,
@@ -65,6 +65,7 @@ class Game {
                 const div = document.createElement("div");
 
                 div.classList.add("cell");
+                div.style.fontSize = `${150 + (10 - size)*20}%`
                 div.setAttribute("row", i.toString());
                 div.setAttribute("col", j.toString());
                 div.addEventListener("click", this.playerMove);
@@ -189,9 +190,13 @@ class Game {
         const size = parseInt(settings['size'].value);
         const starting_player = settings.querySelector('.starting-player-selector .option.active').getAttribute('val');
 
-        if(size < 3 || size > 10) return;
-        settings.style.display = 'none';
-        game_element.style.display = 'flex';
+        if(size < 3 || size > 10) {
+            showMessage("error", getTranslation('invalidSize'));
+            return;
+        }
+
+        settings.classList.add('hide');
+        game_element.classList.remove('hide');
 
         const game = new Game(game_element, game_over_element, size, starting_player);
         game.start();
@@ -204,8 +209,8 @@ class Game {
         const difficulty = settings.querySelector('.bot-difficulty-selector .option.active').getAttribute('val');
         const starting_player = settings.querySelector('.starting-player-selector .option.active').getAttribute('val');
 
-        settings.style.display = 'none';
-        game_element.style.display = 'flex';
+        settings.classList.add('hide');
+        game_element.classList.remove('hide');
 
         const game = new Game(game_element, game_over_element, 3, starting_player, difficulty);
         game.start();
@@ -231,8 +236,8 @@ window.restartGame = (game_mode) => {
     const board_element = game_element.querySelector('.board');
     const settings = document.forms[`${game_mode}-settings`];
 
-    settings.style.display = 'flex';
-    game_element.style.display = 'none';
+    settings.classList.remove('hide');
+    game_element.classList.add('hide');
     game_over_element.classList.add("hide");
     board_element.remove();
 }

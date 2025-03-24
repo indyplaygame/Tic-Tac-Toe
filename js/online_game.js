@@ -1,4 +1,12 @@
-import { copyToClipboard, getCookie, getTranslation, BASE_URL } from "./util.js";
+import {
+    copyToClipboard,
+    getCookie,
+    getTranslation,
+    showMessage,
+    removeListeners,
+    BASE_URL,
+    WebSocketStatus
+} from "./util.js";
 
 const SYMBOLS = {
     'x': 'ti-x',
@@ -38,16 +46,44 @@ export class OnlineGame {
             }));
         };
 
-        this.socket.onclose = () => {
+        this.socket.onclose = (event) => {
+             switch(event.code) {
+                case WebSocketStatus.BAD_REQUEST:
+                    showMessage('error', getTranslation('badRequest'));
+                    break;
+                case WebSocketStatus.UNAUTHORIZED:
+                    showMessage('error', getTranslation('unauthorized'));
+                    break;
+                case WebSocketStatus.FORBIDDEN:
+                    showMessage('error', getTranslation('forbidden'));
+                    break;
+                case WebSocketStatus.NOT_FOUND:
+                    showMessage('error', getTranslation('notFound'));
+                    break;
+                case WebSocketStatus.INTERNAL_SERVER_ERROR:
+                    showMessage('error', getTranslation('internalServerError'));
+                    break;
+                default:
+                    break;
+            }
+
             this.game_list.classList.remove('hide');
             this.game_lobby.classList.add('hide');
             this.game_room.classList.add('hide');
             this.game_over_screen.classList.add('hide');
 
-            const player_ready = this.ready_btn;
-            player_ready.querySelector('span').innerHTML = getTranslation('ready');
-            player_ready.querySelector('input').checked = false;
-            player_ready.removeEventListener('click', this.#readyButtonHandler);
+            removeListeners(this.game_lobby.querySelector('.game-uuid'));
+            removeListeners(this.game_lobby.querySelector('.game-code'));
+
+            const player_ready = this.ready_btn; {
+                const text = player_ready.querySelector('span');
+                text.setAttribute("data-lang", "ready");
+                text.innerHTML = getTranslation('ready');
+
+                const input = player_ready.querySelector('input');
+                input.checked = false;
+                input.removeEventListener('click', this.#readyButtonHandler);
+            }
 
             if(this.board_element) this.board_element.remove();
         };
@@ -58,6 +94,9 @@ export class OnlineGame {
         const type = data.type;
 
         switch(type) {
+            case 'error':
+                this.onError(data.error, data.target)
+                break;
             case 'on_join':
                 this.onJoin(data.game, data.is_owner);
                 break;
@@ -73,11 +112,14 @@ export class OnlineGame {
             case 'player_ready':
                 this.onPlayerReady(data.player_id, data.ready);
                 break;
+            case 'player_turn':
+                this.onPlayerTurn(data.symbol);
+                break;
             case 'player_move':
                 this.onPlayerMove(data.move);
                 break;
             case 'game_start':
-                this.startGame(data);
+                this.startGame();
                 break;
             case 'game_turn':
                 this.gameTurn();
@@ -95,7 +137,10 @@ export class OnlineGame {
             type: 'update_readiness',
             ready: ready
         }));
-        this.ready_btn.querySelector('span').innerHTML = getTranslation(ready ? 'waitingForPlayers' : 'ready');
+
+        const ready_text = this.ready_btn.querySelector('span');
+        ready_text.setAttribute("data-lang", ready ? "waitingForPlayers" : "ready");
+        ready_text.innerHTML = getTranslation(ready ? 'waitingForPlayers' : 'ready');
     };
 
     updateSymbols = () => {
@@ -120,11 +165,15 @@ export class OnlineGame {
         }));
     };
 
+    onError = (error, target) => {
+        if(target === 'console') console.error("WebSocket error: ", error);
+        else if(target === 'user') showMessage('error', getTranslation(error));
+    };
+
     onJoin = (game_data, is_owner) => {
         const game_name = this.game_lobby.querySelector('.game-name');
         const game_uuid = this.game_lobby.querySelector('.game-uuid');
         const game_code = this.game_lobby.querySelector('.game-code');
-        const player_ready = this.ready_btn;
 
         const name = game_data.name;
         const uuid = game_data.uuid;
@@ -133,16 +182,16 @@ export class OnlineGame {
 
         game_name.textContent = name;
         game_uuid.querySelector('p').textContent = uuid;
-        game_uuid.addEventListener('click', () => copyToClipboard(`${BASE_URL}?join=${uuid}`));
+        game_uuid.addEventListener('click', () => copyToClipboard(`${BASE_URL}?join=${uuid}`, getTranslation('copyLink')));
         game_code.querySelector('h3').textContent = code;
-        game_code.querySelector('.copy-code').addEventListener('click', () => copyToClipboard(code));
+        game_code.querySelector('.copy-code').addEventListener('click', () => copyToClipboard(code, getTranslation('copyCode')));
 
         this.player_list.innerHTML = '';
         for(const player of game_data.players) {
             this.onPlayerJoin(player);
         }
 
-        player_ready.addEventListener('click', this.#readyButtonHandler);
+        this.ready_btn.querySelector('input').addEventListener('click', this.#readyButtonHandler);
     };
 
     onPlayerJoin = (player) => {
@@ -230,6 +279,12 @@ export class OnlineGame {
         text.innerHTML = ready ? getTranslation('ready') : getTranslation('notReady');
     };
 
+    onPlayerTurn = (symbol) => {
+        this.turn_icon.classList.remove('ti-x');
+        this.turn_icon.classList.remove('ti-circle');
+        this.turn_icon.classList.add(SYMBOLS[symbol.toLowerCase()]);
+    };
+
     onPlayerMove = (move) => {
         const row = move.row;
         const col = move.col;
@@ -247,7 +302,7 @@ export class OnlineGame {
         this.socket.close();
     };
 
-    startGame = (data) => {
+    startGame = () => {
         this.game_lobby.classList.add('hide');
         this.game_room.classList.remove('hide');
 
@@ -312,9 +367,24 @@ export class OnlineGame {
         this.game_room.classList.add('hide');
         this.game_over_screen.classList.add('hide');
 
-        const player_ready = this.ready_btn;
-        player_ready.querySelector('span').innerHTML = getTranslation('ready');
-        player_ready.querySelector('input').checked = false;
+        const player_ready = this.ready_btn; {
+            const text = player_ready.querySelector('span');
+            text.setAttribute("data-lang", "ready");
+            text.innerHTML = getTranslation('ready');
+
+            player_ready.querySelector('input').checked = false;
+        }
+
+        this.player_list.querySelectorAll('.player-item').forEach(player => {
+            const player_ready = player.querySelector('.player-ready');
+            const icon = player_ready.querySelector('.ti');
+            const text = player_ready.querySelector('p');
+
+            icon.classList.remove('ti-check');
+            icon.classList.add('ti-x');
+
+            text.innerHTML = getTranslation('notReady');
+        })
 
         this.game_element.querySelectorAll('.board').forEach(board => board.remove());
     };

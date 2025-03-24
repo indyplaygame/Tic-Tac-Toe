@@ -5,8 +5,9 @@
         <meta name="viewport"
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+<!--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">-->
 <!--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />-->
+        <link rel="stylesheet" href="css/tabler-icons.min.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/components.css">
         <script type="module" src="js/script.js" defer></script>
@@ -45,7 +46,28 @@
                         <h2 data-lang="helpHeader">Help</h2>
                         <i class="ti ti-x close-icon" onclick="closeHelp()"></i>
                     </div>
-                    <div class="text">
+                    <div class="selector help-tab-selector" func="">
+                        <div class="options">
+                            <button type="button" class="option active" i="0" val="game" data-lang="game">Game</button>
+                            <button type="button" class="option" i="1" val="local-pvp" data-lang="pvpLocal">Local PvP</button>
+                            <button type="button" class="option" i="2" val="online" data-lang="online">Online</button>
+                            <button type="button" class="option" i="3" val="vs-bot" data-lang="vsBot">Against Bot</button>
+                            <button type="button" class="option" i="4" val="about" data-lang="about">About</button>
+                        </div>
+                    </div>
+                    <div class="help-game">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    </div>
+                    <div class="help-local">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    </div>
+                    <div class="help-online">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    </div>
+                    <div class="help-bot">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    </div>
+                    <div class="help-about">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
                     </div>
                 </div>
@@ -82,7 +104,7 @@
                         </div>
                         <button type="button" class="button start-game" onclick="startGame()" data-lang="startGame">Start game</button>
                     </form>
-                    <div class="game">
+                    <div class="game hide">
                         <div class="turn-text">
                             <h3 data-lang="nowPlaying">Now playing:</h3>
                             <i class="ti icon"></i>
@@ -136,7 +158,6 @@
                         </div>
                         <div class="bottom">
                             <label for="readySwitch" class="button ready-btn">
-                                <!-- TODO: Fix translations for ready -->
                                 <span data-lang="ready">Ready</span>
                                 <input type="checkbox" name="readySwitch" id="readySwitch">
                             </label>
@@ -169,7 +190,7 @@
                             <label for="gameName">
                                 <h3 data-lang="gameName">Game name:</h3>
                             </label>
-                            <input type="text" name="gameName" id="gameName" minlength="3" maxlength="20" required>
+                            <input type="text" name="gameName" id="gameName" minlength="3" maxlength="20" pattern="/[a-zA-Z0-9 ]+/" required>
                             <h3 data-lang="gameVisibility">Game visibility:</h3>
                             <div class="selector game-visibility-selector" func="changeGameVisibility">
                                 <div class="options">
@@ -182,7 +203,7 @@
                                 <label for="gamePassword">
                                     <h3 data-lang="gamePassword">Game password:</h3>
                                 </label>
-                                <input type="password" name="gamePassword" id="gamePassword" minlength="3" maxlength="20">
+                                <input type="password" name="gamePassword" id="gamePassword" minlength="6" maxlength="20" pattern="/[a-zA-Z0-9!@#$%^&*-_]+/">
                             </div>
                             <h3 data-lang="startingPlayer">Starting player:</h3>
                             <div class="selector starting-player-selector" func="">
@@ -210,7 +231,7 @@
                             <label for="gameCode">
                                 <h3 data-lang="gameCode">Game code:</h3>
                             </label>
-                            <input type="text" minlength="6" maxlength="6" name="gameCode" id="gameCode" required>
+                            <input type="text" minlength="6" maxlength="6" name="gameCode" id="gameCode" pattern="/[a-zA-Z0-9]+/" required>
                             <div class="game-password hide">
                                 <label for="joinPassword">
                                     <h3 data-lang="password">Password:</h3>
@@ -259,7 +280,7 @@
                         </div>
                         <button type="button" class="button start-game" onclick="startGame()" data-lang="startGame">Start game</button>
                     </form>
-                    <div class="game">
+                    <div class="game hide">
                         <div class="turn-text">
                             <h3 data-lang="nowPlaying">Now playing:</h3>
                             <i class="ti icon"></i>

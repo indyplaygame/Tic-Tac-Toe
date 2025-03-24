@@ -47,8 +47,9 @@ selects.forEach(select => {
     });
 });
 
-document.body.addEventListener("click", () => {
+document.body.addEventListener("click", (e) => {
     selects.forEach(select => {
+        if(select.hasAttribute("open")) e.preventDefault();
         select.removeAttribute("open");
     });
 });

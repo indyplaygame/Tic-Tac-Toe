@@ -10,6 +10,38 @@ export const GameVisibility = {
     PRIVATE: "PRIVATE"
 };
 
+export const HttpStatus = {
+    OK: 200,
+    CREATED: 201,
+    NO_CONTENT: 204,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    CONFLICT: 409,
+    INTERNAL_SERVER_ERROR: 500
+};
+
+export const HttpStatusCode = {
+    200: "OK",
+    201: "Created",
+    204: "No Content",
+    400: "Bad Request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not Found",
+    409: "Conflict",
+    500: "Internal Server Error"
+};
+
+export const WebSocketStatus = {
+    BAD_REQUEST: 4400,
+    UNAUTHORIZED: 4401,
+    FORBIDDEN: 4403,
+    NOT_FOUND: 4404,
+    INTERNAL_SERVER_ERROR: 4500
+};
+
 export const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -49,8 +81,10 @@ export const getTranslation = (key) => {
     return LANGUAGES[document.documentElement.lang].translations[key];
 };
 
-export const copyToClipboard = (text) => {
+export const copyToClipboard = (text, message) => {
     navigator.clipboard.writeText(text).then(r => {});
+
+    if(message) showMessage("success", message);
 };
 
 export const showMessage = (type, message, duration) => {
@@ -76,4 +110,10 @@ export const showMessage = (type, message, duration) => {
     setTimeout(() => messageElement.remove(), duration || 4000);
 
     messages.appendChild(messageElement);
+}
+
+export const removeListeners = (element) => {
+    const clone = element.cloneNode(true);
+    element.replaceWith(clone);
+    return clone;
 }

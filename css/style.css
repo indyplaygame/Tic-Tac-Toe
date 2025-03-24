@@ -198,6 +198,9 @@ div.language-select {
             width: 90%;
             padding: 20px;
             box-sizing: border-box;
+            gap: 20px;
+            display: flex;
+            flex-direction: column;
 
             .header {
                 display: flex;
@@ -588,6 +591,10 @@ div.language-select {
                         text-align: initial;
                     }
 
+                    input#gameCode {
+                        text-transform: uppercase;
+                    }
+
                     .button {
                         width: 100%;
                         margin-top: 20px;
@@ -714,16 +721,13 @@ div.language-select {
         display: none;
     }
 
-    .local-pvp, .vs-bot {
-        .game {
-            display: none;
-        }
-    }
-
     .game {
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 80%;
+        max-width: 400px;
 
         .turn-text {
             display: flex;
@@ -752,30 +756,36 @@ div.language-select {
         }
 
         .board {
+            width: 100%;
+            aspect-ratio: 1;
+            border-collapse: separate;
+
             &.locked {
                 pointer-events: none;
             }
 
             tr {
                 td {
-                    aspect-ratio: 1;
-                    height: 100px;
-                    width: 100px;
+                    position: relative;
                     background-color: var(--active-color);
                     transition: background-color .5s;
+                    box-sizing: border-box;
 
                     .ti {
                         transition: text-shadow .5s;
                     }
 
                     .cell {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
                         display: flex;
                         height: 100%;
                         width: 100%;
                         justify-content: center;
                         align-items: center;
                         cursor: pointer;
-                        font-size: 60px;
+                        font-size: 300%;
                     }
 
                     &:hover {
