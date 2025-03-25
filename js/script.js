@@ -71,6 +71,15 @@ const changeLanguage = (lang) => {
     name.innerHTML = language.name;
 };
 
+const changeHelpTab = (tab) => {
+    const tabs = help_dialog.querySelectorAll('.help-tab');
+
+    tabs.forEach(t => {
+        if(t.classList.contains(tab)) t.classList.remove('hide');
+        else t.classList.add('hide');
+    });
+};
+
 const changeGameVisibility = (visibility) => {
     const password_field = create_online_game.querySelector('.game-password');
     const input = password_field.querySelector('input');
@@ -106,6 +115,7 @@ window.openLeaveGame = openLeaveGame;
 window.closeLeaveGame = closeLeaveGame;
 window.changeMode = changeMode;
 window.changeLanguage = changeLanguage;
+window.changeHelpTab = changeHelpTab;
 window.changeGameVisibility = changeGameVisibility;
 
 changeLanguage(getCookie("language") || "en");

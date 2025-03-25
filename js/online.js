@@ -183,7 +183,7 @@ export const refreshGameList = async () => {
     const gameList = document.querySelector('.game-page.online-pvp .game-list .list');
 
     if(games === null || games.length === 0) {
-        gameList.innerHTML = "<p>No games found</p>";
+        gameList.innerHTML = `<p class="no-games" data-lang="noGamesFound">${getTranslation('noGamesFound')}</p>`;
         return;
     }
 

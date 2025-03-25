@@ -46,28 +46,148 @@
                         <h2 data-lang="helpHeader">Help</h2>
                         <i class="ti ti-x close-icon" onclick="closeHelp()"></i>
                     </div>
-                    <div class="selector help-tab-selector" func="">
+                    <div class="selector help-tab-selector" func="changeHelpTab">
                         <div class="options">
-                            <button type="button" class="option active" i="0" val="game" data-lang="game">Game</button>
-                            <button type="button" class="option" i="1" val="local-pvp" data-lang="pvpLocal">Local PvP</button>
-                            <button type="button" class="option" i="2" val="online" data-lang="online">Online</button>
-                            <button type="button" class="option" i="3" val="vs-bot" data-lang="vsBot">Against Bot</button>
-                            <button type="button" class="option" i="4" val="about" data-lang="about">About</button>
+                            <button type="button" class="option active" i="0" val="help-game" data-lang="game">Game</button>
+                            <button type="button" class="option" i="1" val="help-local" data-lang="pvpLocal">Local PvP</button>
+                            <button type="button" class="option" i="2" val="help-online" data-lang="online">Online</button>
+                            <button type="button" class="option" i="3" val="help-bot" data-lang="vsBot">Against Bot</button>
+                            <button type="button" class="option" i="4" val="help-about" data-lang="about">About</button>
                         </div>
                     </div>
-                    <div class="help-game">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    <div class="help-tab help-game">
+                        <div class="article">
+                            <h3 data-lang="generalInfo">General Information</h3>
+                            <p data-lang="generalInfoContent">
+                                Tic-Tac-Toe is a simple yet strategic two-player game played on a 3x3 grid. Players take turns marking a square with their symbol - "X" or "O".
+                                The goal is to form a straight line of three of their symbols, either horizontally, vertically, or diagonally.<br><br>
+
+                                Despite its simplicity, the game encourages logical thinking and strategy, as an optimal player can always force a win or a draw. Tic-Tac-Toe
+                                is often used as an introduction to game theory and artificial intelligence due to its finite number of possible game states.
+                            </p>
+                        </div>
+                        <div class="article">
+                            <h3 data-lang="commonStrategies">Common Strategies</h3>
+                            <p data-lang="commonStrategiesContent">
+                                While Tic-Tac-Toe is a simple game, mastering it requires strategic thinking. Here are some key strategies to increase your chances of winning:
+                            </p>
+                            <ul>
+                                <li data-lang="cornerOpening">Corner Opening: Always try to start in a corner. This often gives you better chances to create multiple winning lines.</li>
+                                <li data-lang="centerControl">Center Control: Taking the center square is a strong move, as it maximizes your options for forming a winning line.</li>
+                                <li data-lang="blockingOpponent">Blocking Your Opponent: Always look for your opponent’s potential winning moves and block them before they can complete a row.</li>
+                                <li data-lang="forkingStrategy">Forking Strategy: A fork is when you create two possible winning moves at the same time. Your opponent can only block one, leading to your victory.</li>
+                                <li data-lang="avoidingLosses">Avoiding Forced Losses: If your opponent gets two marks in a row with an empty space left, you must block it immediately.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="help-local">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    <div class="help-tab help-local hide">
+                        <div class="article">
+                            <h3 data-lang="localPvPMode">Local Player vs Player Mode</h3>
+                            <p data-lang="localPvPModeContent">
+                                In Local Player vs. Player Mode, two players take turns making moves on the same device. This mode offers flexibility in game settings to customize the experience.<br><br>
+
+                                <b>Game Settings:</b>
+                            </p>
+                            <ul>
+                                <li data-lang="boardSizeDesc">Board Size: Choose a board size between 3×3 and 10×10. Larger boards create longer, more strategic matches.</li>
+                                <li data-lang="startingPlayerDesc">Starting Player: Select whether X or O makes the first move. The first player usually has a slight advantage.</li>
+                            </ul>
+                            <b data-lang="howToPlay">How to Play:</b>
+                            <ul>
+                                <li data-lang="howToPlay1">Players alternate turns, placing their symbol (X or O) on an empty cell.</li>
+                                <li>
+                                    <p data-lang="howToPlay2">The objective is to align a specific number of symbols in a row, column, or diagonal:</p>
+                                    <ul>
+                                        <li data-lang="howToPlay3">For a 3×3 board: Get 3 in a row to win.</li>
+                                        <li data-lang="howToPlay4">For larger boards: Get n in a row to win (n is the size of the board).</li>
+                                    </ul>
+                                </li>
+                                <li data-lang="howToPlay5">If the board fills up without a winner, the game ends in a draw.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="help-online">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    <div class="help-tab help-online hide">
+                        <div class="article">
+                            <h3 data-lang="onlinePvPMode">Online Player vs Player Mode</h3>
+                            <p data-lang="onlinePvPContent">
+                                In Online 1v1 Mode, players can challenge opponents over the internet. You can create or join games and customize settings for an optimal experience.<br><br>
+
+                                <b>Creating a Game</b><br>
+                                When creating a game, you can choose from the following visibility options:
+                            </p>
+                            <ul>
+                                <li data-lang="publicDesc">Public: The game appears in the public game list, allowing anyone to join.</li>
+                                <li data-lang="unlistedDesc">Unlisted: The game does not appear in the public list, but can be joined via game code or direct URL.</li>
+                                <li data-lang="privateDesc">Private: The game requires a password for entry, ensuring only invited players can join.</li>
+                            </ul>
+                            <p data-lang="onlinePvPContent1">You can also set the starting player as:</p>
+                            <ul>
+                                <li data-lang="xStart">X (always starts)</li>
+                                <li data-lang="oStart">O (always starts)</li>
+                                <li data-lang="randomStart">Random (randomly decides who starts)</li>
+                            </ul>
+                            <p data-lang="afterCreating">
+                                After creating a game, you’ll enter the Game Lobby, where the game owner can assign each player’s symbol (X or O) before starting the match.<br><br>
+
+                                <b>Joining a Game</b><br>
+                                You can join a game in three ways:
+                            </p>
+                            <ul>
+                                <li data-lang="selectPublicList">Selecting a game from the public list (for public games).</li>
+                                <li data-lang="enterGameCode">Entering a game code (for unlisted or private games).</li>
+                                <li data-lang="useDirectUrl">Using a direct URL shared by the game creator (currently only for public or unlisted games).</li>
+                            </ul>
+                            <b data-lang="gameplay">Gameplay</b>
+                            <ul>
+                                <li data-lang="standardRules">The game follows standard Tic-Tac-Toe rules, with players taking turns to place their symbol on the board.</li>
+                                <li data-lang="winCondition">First player to get 3 in a row wins.</li>
+                                <li data-lang="drawCondition">If the board fills up with no winner, the game ends in a draw.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="help-bot">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
+                    <div class="help-tab help-bot hide">
+                        <div class="article">
+                            <h3 data-lang="playerVsBotMode">Player vs Bot Mode</h3>
+                            <p data-lang="playerVsBotContent">
+                                In Player vs Bot Mode, you can challenge an AI opponent with different difficulty levels. Customize the game settings and
+                                test your skills against increasingly challenging bots!<br><br>
+
+                                <b>Game Settings</b>
+                            </p>
+                            <ul>
+                                <li data-lang="vsBotStarting">Starting Player: You can choose whether you or the bot starts first. The bot always plays as X.</li>
+                                <li data-lang="vsBotWinCondition">Win Conditions: First one to get 3 in a row wins.</li>
+                            </ul>
+                        </div>
+                        <div class="article">
+                            <h3 data-lang="botDifficultyLevels">Bot Difficulty Levels</h3>
+                            <ol>
+                                <li data-lang="botDifficultyEasy"><b>Easy (Random)</b> – The bot makes completely random moves, offering little to no challenge.</li>
+                                <li>
+                                    <p data-lang="botDifficultyMedium"><b>Medium (Basic Strategy)</b> – The bot follows simple rules:</p>
+                                    <ul>
+                                        <li data-lang="winIfPossible">Win if possible.</li>
+                                        <li data-lang="blockOpponentsMove">If winning is not possible, block the opponent’s winning move.</li>
+                                        <li data-lang="makeRandomMove">If neither applies, make a random move.</li>
+                                    </ul>
+                                </li>
+                                <li data-lang="botDifficultyImpossible"><b>Impossible (Minimax Algorithm)</b> – The bot uses the Minimax algorithm, which means it plays perfectly and cannot lose.</li>
+                                <li data-lang="botDifficultyAI">
+                                    <b>AI (Gemini 2.0 Flash Lite)</b> – The bot uses a language Gemini 2.0 Flash Lite model to predict moves, but since it sometimes chooses occupied cells,
+                                    it falls back to the Medium bot’s strategy when necessary. This makes the AI a mix of unpredictable and strategic play.
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="article">
+                            <h3 data-lang="gameplay">Gameplay</h3>
+                            <ul>
+                                <li data-lang="turnsAlternate">Turns alternate between you and the bot.</li>
+                                <li data-lang="botMakesMove">The bot instantly makes its move when it’s its turn.</li>
+                                <li data-lang="endsInDraw">If the board fills up with no winner, the game ends in a draw.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="help-about">
+                    <div class="help-tab help-about hide">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet aperiam, autem blanditiis dolore doloribus eum eveniet, incidunt ipsam laboriosam maxime nobis quas quidem sint sunt temporibus totam velit voluptates!
                     </div>
                 </div>
