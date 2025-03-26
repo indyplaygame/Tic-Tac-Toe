@@ -210,8 +210,17 @@ export const refreshGameList = async () => {
         column.appendChild(gameId);
         element.appendChild(column);
 
-        const players = document.createElement('p');
-        players.textContent = `${game.player_count} ${game.player_count !== 1 ? getTranslation('players') : getTranslation('player')}`;
+        const players = document.createElement('p'); {
+            const count = document.createElement('p');
+            const text = document.createElement('p');
+
+            count.textContent = game.player_count;
+            text.setAttribute('data-lang', game.player_count !== 1 ? 'players' : 'player');
+            text.innerHTML = game.player_count !== 1 ? getTranslation('players') : getTranslation('player');
+
+            players.appendChild(count);
+            players.appendChild(text);
+        }
         element.appendChild(players);
 
         element.addEventListener('click', () => {
@@ -232,5 +241,17 @@ window.createOnlineGame = createOnlineGame;
 window.joinOnlineGame = joinOnlineGame;
 window.refreshGameList = refreshGameList;
 window.leaveGame = leaveGame;
+
+document.forms['online-game-settings'].addEventListener('keypress', async (event) => {
+    if(event.key !== 'Enter') return;
+    event.preventDefault();
+    await createOnlineGame();
+});
+
+document.forms['join-online-game'].addEventListener('keypress', async (event) => {
+    if(event.key !== 'Enter') return;
+    event.preventDefault();
+    await joinOnlineGame();
+});
 
 export { joinGame };

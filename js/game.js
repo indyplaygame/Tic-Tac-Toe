@@ -241,3 +241,8 @@ window.restartGame = (game_mode) => {
     game_over_element.classList.add("hide");
     board_element.remove();
 }
+
+document.forms['local-pvp-settings'].addEventListener('submit', (event) => {
+    event.preventDefault();
+    Game.startLocalPvP();
+});
