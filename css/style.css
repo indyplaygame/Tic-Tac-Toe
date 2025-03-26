@@ -107,6 +107,16 @@ div.language-select {
 
         .mobile {
             z-index: 31;
+
+            .options {
+                .option:first-child {
+                    border-radius: 10px 10px 0 0;
+                }
+
+                .option:last-child {
+                    border-radius: 0 0 10px 10px;
+                }
+            }
         }
 
         .flag {
@@ -203,6 +213,52 @@ div.language-select {
             gap: 20px;
             display: flex;
             flex-direction: column;
+
+            .mobile {
+                display: none;
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
+
+                .select {
+                    position: static;
+                    width: 100%;
+
+                    .selected {
+                        margin-inline: 20px;
+                        padding-inline: 10px;
+                        padding-block: 15px;
+                        border-bottom: solid 2px var(--border-color);
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        width: 100%;
+                    }
+
+                    .options {
+                        position: absolute;
+                        width: 100vw;
+                        height: 100vh;
+                        top: 0;
+                        left: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        backdrop-filter: blur(5px);
+                        background-color: var(--dark-bg);
+
+                        .option {
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+
+                            &:hover {
+                                background-color: var(--bg-hover50);
+                            }
+                        }
+                    }
+                }
+            }
 
             .header {
                 display: flex;
@@ -452,6 +508,7 @@ div.language-select {
                         flex-direction: column;
                         margin-top: 20px;
                         gap: 10px;
+                        overflow-y: scroll;
 
                         .player-item {
                             width: 100%;
@@ -589,6 +646,7 @@ div.language-select {
                 }
             }
             .create-game, .join-game, .leave-game {
+                z-index: 20;
                 display: flex;
                 position: absolute;
                 justify-content: center;

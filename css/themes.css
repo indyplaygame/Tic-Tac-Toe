@@ -44,6 +44,8 @@ body[data-theme="light"] {
     --shadow-color: #969696ff;
     --shadow-color20: #828282;
     --shadow-color50: #828282;
+    --dark-bg: #00000060;
+    --bg-hover50: #00000020;
 }
 
 body[data-theme="dark"] {
@@ -67,4 +69,6 @@ body[data-theme="dark"] {
     --shadow-color: #282828ff;
     --shadow-color20: #b0b0b0;
     --shadow-color50: #666666;
+    --dark-bg: #00000050;
+    --bg-hover50: #00000060;
 }

@@ -73,6 +73,12 @@ const changeLanguage = (lang) => {
 
 const changeHelpTab = (tab) => {
     const tabs = help_dialog.querySelectorAll('.help-tab');
+    const select = help_dialog.querySelector('.help-page-select');
+    const selected = select.querySelector('.selected b');
+    const option = select.querySelector(`.options .option[val="${tab}"] p`);
+
+    selected.innerHTML = option.innerHTML;
+    selected.setAttribute('data-lang', option.getAttribute('data-lang'));
 
     tabs.forEach(t => {
         if(t.classList.contains(tab)) t.classList.remove('hide');

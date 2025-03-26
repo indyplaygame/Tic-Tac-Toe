@@ -55,6 +55,33 @@
                             <button type="button" class="option" i="4" val="help-about" data-lang="about">About</button>
                         </div>
                     </div>
+                    <div class="mobile">
+                        <details class="select help-page-select" func="changeHelpTab">
+                            <summary>
+                                <div class="selected">
+                                    <b data-lang="game">English</b>
+                                    <i class="ti ti-chevron-down"></i>
+                                </div>
+                            </summary>
+                            <div class="options">
+                                <div class="option" val="help-game">
+                                    <p data-lang="game"></p>
+                                </div>
+                                <div class="option" val="help-local">
+                                    <p data-lang="pvpLocal"></p>
+                                </div>
+                                <div class="option" val="help-online">
+                                    <p data-lang="online"></p>
+                                </div>
+                                <div class="option" val="help-bot">
+                                    <p data-lang="vsBot"></p>
+                                </div>
+                                <div class="option" val="help-about">
+                                    <p data-lang="about"></p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
                     <div class="help-tab help-game">
                         <div class="article">
                             <h3 data-lang="generalInfo">General Information</h3>
@@ -199,7 +226,7 @@
             <div class="selector mode-selector" func="changeMode">
                 <div class="options game-modes">
                     <button type="button" class="option game-mode" i="0" val="local_pvp" data-lang="pvpLocal">PvP (Local)</button>
-                    <button type="button" class="option game-mode" i="1" val="online_pvp" data-lang="pvpOnline">PvP (Online)</button>
+                    <button type="button" class="option game-mode" i="1" val="online_pvp" data-lang="pvpOnline" disabled>PvP (Online)</button>
                     <button type="button" class="option game-mode" i="2" val="vs_bot" data-lang="vsBot">Against Bot</button>
                 </div>
             </div>

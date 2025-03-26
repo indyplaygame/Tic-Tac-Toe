@@ -30,6 +30,50 @@
     }
 }
 
+@media(max-width: 550px) {
+    .game-container {
+        .online-pvp {
+            padding: 13px !important;
+
+            .create-game {
+                width: 100vw !important;
+
+                form {
+                    width: 85% !important;
+                }
+
+                .game-visibility-selector {
+                    --option-w: calc(100% - 6px) !important;
+                    --option-h: 30px;
+                    --option-gap: 10px;
+
+                    width: 90%;
+
+                    .options {
+                        width: 100%;
+                        flex-direction: column;
+                        border-radius: 20px;
+
+                        &::before {
+                            transform: translateY(calc(var(--n) * calc(var(--option-h) + var(--option-gap)))) !important;
+                        }
+                    }
+                }
+            }
+
+            .game-lobby {
+                .top {
+                    scale: .95;
+
+                    .player-item * {
+                        scale: .95;
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media(max-width: 650px) {
     .mode-selector {
         --option-w: calc(100% - 6px) !important;
@@ -68,6 +112,38 @@
                     &::before {
                         transform: translateY(calc(var(--n) * calc(var(--option-h) + var(--option-gap)))) !important;
                     }
+                }
+            }
+        }
+    }
+}
+
+@media(max-width: 800px) {
+    .help {
+        .help-tab-selector {
+            display: none !important;
+        }
+
+        .mobile {
+            display: flex !important;
+        }
+    }
+}
+
+@media(max-height: 1000px) {
+    .game-container {
+        height: 50% !important;
+
+        .vs-bot {
+            form {
+                scale: 0.9;
+            }
+        }
+
+        .online-pvp {
+            .create-game {
+                form {
+                    transform: translateY(-150px);
                 }
             }
         }

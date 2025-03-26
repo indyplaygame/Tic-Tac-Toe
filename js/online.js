@@ -162,17 +162,23 @@ const listOnlineGames = async () => {
 };
 
 export const auth = async () => {
+    const mode_selector = document.querySelector('.mode-selector');
+    const online_pvp = mode_selector.querySelector(".option[val='online_pvp']");
+
     let token = getCookie("token");
     if(token)
-        if(await verifyToken(token)) return;
+        if(await verifyToken(token)) {
+            online_pvp.disabled = false;
+            return;
+        }
 
     token = await generateToken();
     if(!token) {
-        const mode_selector = document.querySelector('.mode-selector');
-        const online_pvp = mode_selector.querySelector(".option[val='online_pvp']");
         online_pvp.disabled = true;
 
         return;
+    } else {
+        online_pvp.disabled = false;
     }
 
     setCookie("token", token, "/", 0, {secure: true, same_site: "None"});
