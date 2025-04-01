@@ -121,6 +121,7 @@ class Game {
         cell.innerHTML = `<i class='ti ${player.symbol}'></i>`;
         cell.removeEventListener("click", this.playerMove);
 
+        this.updateWeights(row, col);
 
         this.#free_cells--;
         if(this.checkWin(row, col)) return;
@@ -147,6 +148,14 @@ class Game {
         this.#player_turn = (this.#player_turn + 1) % 2;
         this.turn();
         this.lockBoard(false);
+    };
+
+    updateWeights = (row, col) => {
+        const val = this.#players[this.#player_turn].value;
+        this.#weights.rows[row] += val;
+        this.#weights.cols[col] += val;
+        if(row === col) this.#weights.diag1 += val;
+        if(row + col === this.#board_size - 1) this.#weights.diag2 += val;
     };
 
     determineWinner = (row, col) => {
