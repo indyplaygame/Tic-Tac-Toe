@@ -50,6 +50,14 @@ export const sign = (x) => {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
 };
 
+export const min = (a, b) => {
+    return a < b ? a : b;
+}
+
+export const max = (a, b) => {
+    return a > b ? a : b;
+}
+
 export const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
