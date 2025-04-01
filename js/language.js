@@ -88,7 +88,7 @@ export const LANGUAGES = {
             howToPlay1: 'Players alternate turns, placing their symbol (X or O) on an empty cell.',
             howToPlay2: 'The objective is to align a specific number of symbols in a row, column, or diagonal:',
             howToPlay3: 'For a 3×3 board: Get 3 in a row to win.',
-            howToPlay4: 'For larger boards: Get n in a row to win (n is the size of the board).',
+            howToPlay4: 'For larger boards: Get 4 in a row to win.',
             howToPlay5: 'If the board fills up without a winner, the game ends in a draw.',
             onlinePvPMode: 'Online Player vs Player Mode',
             onlinePvPContent: `
@@ -228,7 +228,7 @@ export const LANGUAGES = {
             howToPlay1: 'Gracze na zmianę wykonują ruchy, umieszczając swój symbol (X lub O) w pustym polu.',
             howToPlay2: 'Celem jest ułożenie określonej liczby symboli w rzędzie, kolumnie lub na przekątnej:',
             howToPlay3: 'Dla planszy 3×3: Uzyskaj 3 w rzędzie, aby wygrać.',
-            howToPlay4: 'Dla większych plansz: Uzyskaj n w rzędzie, aby wygrać (n to rozmiar planszy).',
+            howToPlay4: 'Dla większych plansz: Uzyskaj 4 w rzędzie, aby wygrać.',
             howToPlay5: 'Jeśli plansza się zapełni bez zwycięzcy, gra kończy się remisem.',
             onlinePvPMode: 'Tryb Online Gracz vs Gracz',
             onlinePvPContent: `
@@ -368,7 +368,7 @@ export const LANGUAGES = {
             howToPlay1: 'Los jugadores se turnan para colocar su símbolo (X o O) en una celda vacía.',
             howToPlay2: 'El objetivo es alinear un número específico de símbolos en una fila, columna o diagonal:',
             howToPlay3: 'Para un tablero de 3×3: Consigue 3 en línea para ganar.',
-            howToPlay4: 'Para tableros más grandes: Consigue n en línea para ganar (n es el tamaño del tablero).',
+            howToPlay4: 'Para tableros más grandes: Consigue 4 en línea para ganar.',
             howToPlay5: 'Si el tablero se llena sin un ganador, el juego termina en empate.',
             onlinePvPMode: 'Modo Jugador vs Jugador en Línea',
             onlinePvPContent: `
@@ -508,7 +508,7 @@ export const LANGUAGES = {
             howToPlay1: 'I giocatori si alternano nel fare mosse, posizionando il loro simbolo (X o O) su una cella vuota.',
             howToPlay2: 'L\'obiettivo è allineare un numero specifico di simboli in una riga, colonna o diagonale:',
             howToPlay3: 'Per un tabellone 3x3: Ottieni 3 in fila per vincere.',
-            howToPlay4: 'Per tabelloni più grandi: Ottieni n in fila per vincere (n è la dimensione del tabellone).',
+            howToPlay4: 'Per tabelloni più grandi: Ottieni 4 in fila per vincere.',
             howToPlay5: 'Se il tabellone si riempie senza un vincitore, la partita termina in pareggio.',
             onlinePvPMode: 'Modalità Giocatore Online contro Giocatore',
             onlinePvPContent: `
@@ -648,7 +648,7 @@ export const LANGUAGES = {
             howToPlay1: 'Hráči se střídají v tazích, umisťují svůj symbol (X nebo O) na prázdnou buňku.',
             howToPlay2: 'Cílem je seřadit určité množství symbolů v řadě, sloupci nebo diagonále:',
             howToPlay3: 'Pro desku 3×3: Získejte 3 v řadě pro výhru.',
-            howToPlay4: 'Pro větší desky: Získejte n v řadě pro výhru (n je velikost desky).',
+            howToPlay4: 'Pro větší desky: Získejte 4 v řadě pro výhru.',
             howToPlay5: 'Pokud deska zaplní a není vítěz, hra končí remízou.',
             onlinePvPMode: 'Mód Online Hráč vs Hráč',
             onlinePvPContent: `
@@ -787,7 +787,7 @@ export const LANGUAGES = {
             howToPlay1: 'Οι παίκτες εναλλάσσονται σε κινήσεις, τοποθετώντας το σύμβολό τους (Χ ή Ο) σε ένα κενό κελί.',
             howToPlay2: 'Ο στόχος είναι να ευθυγραμμίσετε έναν συγκεκριμένο αριθμό συμβόλων σε σειρά, στήλη ή διαγώνιο:',
             howToPlay3: 'Για έναν πίνακα 3×3: Κερδίστε 3 στη σειρά για να νικήσετε.',
-            howToPlay4: 'Για μεγαλύτερους πίνακες: Κερδίστε n στη σειρά για να νικήσετε (n είναι το μέγεθος του πίνακα).',
+            howToPlay4: 'Για μεγαλύτερους πίνακες: Κερδίστε 4 στη σειρά για να νικήσετε.',
             howToPlay5: 'Αν ο πίνακας γεμίσει χωρίς νικητή, το παιχνίδι τελειώνει ισόπαλο.',
             onlinePvPMode: 'Online τρόπος Παίκτη vs Παίκτη',
             onlinePvPContent: `
@@ -926,7 +926,7 @@ export const LANGUAGES = {
             howToPlay1: 'يتناوب اللاعبون الأدوار، حيث يضع كل منهم رمزه (X أو O) في خلية فارغة.',
             howToPlay2: 'الهدف هو محاذاة عدد معين من الرموز في صف أو عمود أو قطر:',
             howToPlay3: 'بالنسبة للوحة 3×3: الفوز يتحقق عند الحصول على 3 رموز متتالية.',
-            howToPlay4: 'بالنسبة للوحات الأكبر: يجب تحقيق n رموز متتالية للفوز (حيث n هو حجم اللوحة).',
+            howToPlay4: 'بالنسبة للوحات الأكبر: يجب تحقيق 4 رموز متتالية للفوز.',
             howToPlay5: 'إذا امتلأت اللوحة بدون فائز، تنتهي اللعبة بالتعادل.',
             onlinePvPMode: 'وضع اللعب عبر الإنترنت (لاعب ضد لاعب)',
             onlinePvPContent: `
@@ -1065,7 +1065,7 @@ export const LANGUAGES = {
             howToPlay1: '玩家輪流落子，將自己的標記（X 或 O）放在空白格子內。',
             howToPlay2: '目標是讓特定數量的符號排成一條直線（橫向、縱向或對角線）：',
             howToPlay3: '對於 3×3 棋盤：先排成 3 個相同符號者獲勝。',
-            howToPlay4: '對於更大棋盤：需要連成 n 個相同符號才能獲勝（n 為棋盤大小）。',
+            howToPlay4: '對於更大棋盤：需要連成 4 個相同符號才能獲勝。',
             howToPlay5: '若棋盤被填滿但無人獲勝，則遊戲平手。',
             onlinePvPMode: '線上玩家對戰模式',
             onlinePvPContent: `
@@ -1203,7 +1203,7 @@ export const LANGUAGES = {
             howToPlay1: 'プレイヤーは交互に自分の記号（XまたはO）を空いているマスに配置します。',
             howToPlay2: '縦、横、または斜めに一定数の記号を並べることが目的です。',
             howToPlay3: '3×3の盤面では、3つ並べれば勝利。',
-            howToPlay4: '大きな盤面では、盤面のサイズ（n）に応じてn個並べる必要があります。',
+            howToPlay4: 'より大きな盤面では、4つ並べる必要があります。',
             howToPlay5: '盤面が埋まっても勝者がいない場合、引き分けとなります。',
             onlinePvPMode: 'オンライン対戦モード',
             onlinePvPContent: `
@@ -1344,7 +1344,7 @@ export const LANGUAGES = {
             howToPlay1: '플레이어는 번갈아 가며 빈 칸에 자신의 심볼(X 또는 O)을 배치합니다.',
             howToPlay2: '목표는 가로, 세로 또는 대각선으로 특정 개수의 심볼을 연속으로 맞추는 것입니다:',
             howToPlay3: '3×3 보드: 3개를 연속으로 맞추면 승리합니다.',
-            howToPlay4: '더 큰 보드: n개의 연속된 심볼이 필요하며, n은 보드 크기와 동일합니다.',
+            howToPlay4: '보다 큰 보드: 4개를 연속으로 맞추어야 합니다.',
             howToPlay5: '보드가 가득 찼는데 승자가 없으면 무승부로 끝납니다.',
             onlinePvPMode: '온라인 플레이어 vs 플레이어 모드',
             onlinePvPContent: `

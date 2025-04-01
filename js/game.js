@@ -1,5 +1,5 @@
 import { Bot } from './bot.js';
-import { getTranslation,  showMessage } from "./util.js";
+import { abs, sign, getTranslation, showMessage } from "./util.js";
 
 const WinState = {
     Player1: 0,
@@ -14,6 +14,8 @@ const SYMBOLS = {
 const mode_selector = document.querySelector('.mode-selector');
 
 class Game {
+    #WINNING_SCORE;
+
     #game_element; #board_element; #turn_text; #game_over_screen;
     #player_turn; #players;
     #board; #board_size; #weights; #free_cells;
@@ -32,6 +34,8 @@ class Game {
             diag1: 0,
             diag2: 0
         }
+
+        this.#WINNING_SCORE = size === 3 ? 3 : 4;
 
         this.#player_turn = 0;
         this.#players = {
@@ -110,7 +114,7 @@ class Game {
         this.updateWeights(row, col);
 
         this.#free_cells--;
-        if(this.checkWin()) return;
+        if(this.checkWin(row, col)) return;
 
         this.#player_turn = (this.#player_turn + 1) % 2;
         this.turn();
@@ -131,7 +135,7 @@ class Game {
         this.updateWeights(row, col);
 
         this.#free_cells--;
-        if (this.checkWin()) return;
+        if (this.checkWin(row, col)) return;
 
         this.#player_turn = (this.#player_turn + 1) % 2;
         this.turn();
@@ -146,20 +150,49 @@ class Game {
         if(row + col === this.#board_size - 1) this.#weights.diag2 += val;
     }
 
-    checkWin = () => {
-        const p1_w = this.#players[0].value * this.#board_size;
-        const p2_w = this.#players[1].value * this.#board_size;
+    checkWin = (row, col) => {
+        const p1_v = this.#players[0].value;
+        const p2_v = this.#players[1].value;
 
-        for(const w_row of this.#weights.rows) {
-            if(w_row === p1_w) return this.endGame(WinState.Player1);
-            if(w_row === p2_w) return this.endGame(WinState.Player2);
+        let r_sum = this.#board[row][0];
+        for(let c = 1; c < this.#board_size; c++) {
+            const val = this.#board[row][c];
+            if(val === -sign(r_sum)) r_sum = val;
+            else r_sum += val;
         }
-        for(const w_col of this.#weights.cols) {
-            if(w_col === p1_w) return this.endGame(WinState.Player1);
-            if(w_col === p2_w) return this.endGame(WinState.Player2);
+        if(r_sum === p1_v * this.#WINNING_SCORE) return this.endGame(WinState.Player1);
+        if(r_sum === p2_v * this.#WINNING_SCORE) return this.endGame(WinState.Player2);
+
+        let c_sum = this.#board[0][col];
+        for(let r = 1; r < this.#board_size; r++) {
+            const val = this.#board[r][col];
+            if(val === -sign(c_sum)) c_sum = val;
+            else c_sum += val;
         }
-        if(this.#weights.diag1 === p1_w || this.#weights.diag2 === p1_w) return this.endGame(WinState.Player1);
-        if(this.#weights.diag1 === p2_w || this.#weights.diag2 === p2_w) return this.endGame(WinState.Player2);
+        if(c_sum === p1_v * this.#WINNING_SCORE) return this.endGame(WinState.Player1);
+        if(c_sum === p2_v * this.#WINNING_SCORE) return this.endGame(WinState.Player2);
+
+        if(row === col) {
+            let d1_sum = this.#board[0][0];
+            for(let i = 1; i < this.#board_size; i++) {
+                const val = this.#board[i][i];
+                if(val === -sign(d1_sum)) d1_sum = val;
+                else d1_sum += val;
+            }
+            if(d1_sum === p1_v * this.#WINNING_SCORE) return this.endGame(WinState.Player1);
+            if(d1_sum === p2_v * this.#WINNING_SCORE) return this.endGame(WinState.Player2);
+        }
+
+        if(row + col === this.#board_size - 1) {
+            let d2_sum = this.#board[0][this.#board_size - 1];
+            for(let i = 1; i < this.#board_size; i++) {
+                const val = this.#board[i][this.#board_size - i - 1];
+                if(val === -sign(d2_sum)) d2_sum = val;
+                else d2_sum += val;
+            }
+            if(d2_sum === p1_v * this.#WINNING_SCORE) return this.endGame(WinState.Player1);
+            if(d2_sum === p2_v * this.#WINNING_SCORE) return this.endGame(WinState.Player2);
+        }
 
         if(this.#free_cells === 0) return this.endGame(WinState.Draw);
 
@@ -190,7 +223,7 @@ class Game {
         const size = parseInt(settings['size'].value);
         const starting_player = settings.querySelector('.starting-player-selector .option.active').getAttribute('val');
 
-        if(size < 3 || size > 10) {
+        if(size < 3 || size > 10 || Number.isNaN(size)) {
             showMessage("error", getTranslation('invalidSize'));
             return;
         }
